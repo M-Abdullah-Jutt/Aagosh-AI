@@ -1,0 +1,1 @@
+# Coach module initialization

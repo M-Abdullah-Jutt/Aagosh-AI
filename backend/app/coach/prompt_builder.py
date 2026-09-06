@@ -1,6 +1,12 @@
 import json
 from typing import Dict, Any, List, Optional
 
+from app.coach.languages import (
+    DEFAULT_LANGUAGE,
+    get_language_directive,
+    normalize_language,
+)
+
 SYSTEM_PROMPT = """You are Aaghosh AI, a compassionate, source-grounded parenting-support assistant.
 
 CRITICAL INSTRUCTIONS AND BOUNDARIES:
@@ -48,10 +54,12 @@ class ParentingPromptBuilder:
     def build_prompts(
         parent_message: str,
         sanitized_context: Dict[str, Any],
-        conversation_history: Optional[List[Dict[str, str]]] = None
+        conversation_history: Optional[List[Dict[str, str]]] = None,
+        language: str = DEFAULT_LANGUAGE
     ) -> tuple[str, str]:
         # Clean parent message to avoid direct formatting breaks
         clean_message = parent_message.strip()
+        resolved_language = normalize_language(language)
 
         child = sanitized_context.get("child", {})
         goals = sanitized_context.get("goals", [])
@@ -118,6 +126,14 @@ class ParentingPromptBuilder:
 {chr(10).join(history_lines)}
 </RECENT_CONVERSATION_HISTORY>\n"""
 
+        language_directive = get_language_directive(resolved_language)
+
+        system_prompt = f"""{SYSTEM_PROMPT}
+7. RESPONSE LANGUAGE (MANDATORY):
+   - {language_directive}
+   - This language requirement applies to every string value you return, without exception.
+"""
+
         user_prompt = f"""<CONTEXT_DATA>
 {chr(10).join(context_lines)}
 </CONTEXT_DATA>
@@ -126,6 +142,6 @@ class ParentingPromptBuilder:
 {clean_message}
 </PARENT_QUESTION>
 
-Instructions: Respond to the parent's question using ONLY the provided CONTEXT_DATA and dialogue context. Ensure output is formatted as JSON with "answer", "key_points", and "suggested_steps" fields."""
+Instructions: Respond to the parent's question using ONLY the provided CONTEXT_DATA and dialogue context. Ensure output is formatted as JSON with "answer", "key_points", and "suggested_steps" fields. {language_directive}"""
 
-        return SYSTEM_PROMPT, user_prompt
+        return system_prompt, user_prompt

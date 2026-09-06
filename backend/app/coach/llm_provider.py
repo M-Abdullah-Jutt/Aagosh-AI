@@ -33,9 +33,19 @@ class LLMProvider(ABC):
     """
 
     @abstractmethod
-    def generate_response(self, system_prompt: str, user_prompt: str, context: Dict[str, Any]) -> Dict[str, Any]:
+    def generate_response(
+        self,
+        system_prompt: str,
+        user_prompt: str,
+        context: Dict[str, Any],
+        language: str = "en"
+    ) -> Dict[str, Any]:
         """
         Generates a structured dictionary response given prompts and context.
+
+        `language` is the code the response values must be written in. Network
+        providers receive it implicitly via the system prompt directive; offline
+        providers use it to select localized canned content.
         """
         pass
 
@@ -67,8 +77,14 @@ class MockLLMProvider(LLMProvider):
     def model_name(self) -> str:
         return self._model_name
 
-    def generate_response(self, system_prompt: str, user_prompt: str, context: Dict[str, Any]) -> Dict[str, Any]:
-        logger.info("[MockLLMProvider] Generating response for prompt")
+    def generate_response(
+        self,
+        system_prompt: str,
+        user_prompt: str,
+        context: Dict[str, Any],
+        language: str = "en"
+    ) -> Dict[str, Any]:
+        logger.info(f"[MockLLMProvider] Generating response for prompt (language={language})")
 
         # Check for test control flags in prompt/message
         if "mock_timeout" in user_prompt:
@@ -96,9 +112,16 @@ class MockLLMProvider(LLMProvider):
 
         knowledge = context.get("retrieved_knowledge", [])
         analytics = context.get("analytics", {})
+        is_urdu = str(language).lower().startswith("ur")
 
         # Scenario 1: No knowledge available
         if not knowledge:
+            if is_urdu:
+                return {
+                    "answer": "اس مخصوص صورتحال کے لیے موجودہ پیرنٹنگ نالج بیس میں میرے پاس کافی متعلقہ رہنمائی موجود نہیں ہے۔",
+                    "key_points": ["اس سوال کے لیے نالج بیس میں کوئی براہِ راست رہنمائی نہیں ملی۔"],
+                    "suggested_steps": ["عمومی اور عمر کے مطابق رہنمائی دیکھیں یا بعد میں دوبارہ کوشش کریں۔"]
+                }
             return {
                 "answer": "I don't have sufficiently relevant guidance in the current parenting knowledge base for this specific situation.",
                 "key_points": ["No direct Knowledge Base protocols found for this inquiry."],
@@ -108,29 +131,48 @@ class MockLLMProvider(LLMProvider):
         # Scenario 2: Insufficient analytics data
         insufficient_prefix = ""
         if analytics.get("insufficient_data"):
-            insufficient_prefix = "There aren't enough recorded observations yet to identify a consistent pattern. Based on the parenting guidance available for this situation, you could try using structured transitions. "
+            if is_urdu:
+                insufficient_prefix = (
+                    "مستقل مزاجی کا کوئی واضح نمونہ پہچاننے کے لیے ابھی کافی مشاہدات ریکارڈ نہیں ہوئے۔ "
+                    "دستیاب پیرنٹنگ رہنمائی کی بنیاد پر آپ منظم انداز میں منتقلی کا طریقہ آزما سکتے ہیں۔ "
+                )
+            else:
+                insufficient_prefix = "There aren't enough recorded observations yet to identify a consistent pattern. Based on the parenting guidance available for this situation, you could try using structured transitions. "
 
-        # Extract content from knowledge base chunks to form response
-        first_chunk = knowledge[0]
-        chunk_content = first_chunk.get("content", "")
-
-        answer_text = (
-            f"{insufficient_prefix}When dealing with transition challenges, Parenting Base guidance recommends "
-            "acknowledging the child's emotions while clearly holding the limit and offering limited choice."
-        )
-
-        key_points = [
-            "Acknowledge the child's feeling before enforcing the limit.",
-            "Offer 2 clear options to give the child a sense of autonomy.",
-            "Consistently follow through with kindness and firmness."
-        ]
-
-        suggested_steps = [
-            "Acknowledge Emotion: Validation helps de-escalate emotional intensity.",
-            "Hold the Limit: Maintain the boundary predictably.",
-            "Offer Limited Choice: Give choices like 'Do you want to walk or hop to the car?'",
-            "Follow Through: Stay calm and carry out the transition."
-        ]
+        if is_urdu:
+            answer_text = (
+                f"{insufficient_prefix}منتقلی کے چیلنجز سے نمٹتے وقت پیرنٹنگ رہنمائی یہ تجویز کرتی ہے کہ "
+                "بچے کے جذبات کو تسلیم کیا جائے اور ساتھ ہی حد کو واضح طور پر برقرار رکھتے ہوئے "
+                "محدود انتخاب پیش کیا جائے۔"
+            )
+            key_points = [
+                "حد نافذ کرنے سے پہلے بچے کے جذبے کو تسلیم کریں۔",
+                "بچے کو خود مختاری کا احساس دلانے کے لیے دو واضح اختیارات دیں۔",
+                "مہربانی اور مضبوطی کے ساتھ مسلسل ایک ہی موقف پر قائم رہیں۔"
+            ]
+            suggested_steps = [
+                "جذبے کو تسلیم کریں: توثیق کرنے سے جذبات کی شدت کم ہوتی ہے۔",
+                "حد برقرار رکھیں: سرحد کو پیش گوئی کے قابل انداز میں قائم رکھیں۔",
+                "محدود انتخاب دیں: مثلاً 'کیا تم گاڑی تک چل کر جانا چاہو گے یا چھلانگ لگا کر؟'",
+                "عمل کروائیں: خود پرسکون رہیں اور منتقلی مکمل کروائیں۔"
+            ]
+        else:
+            # Extract content from knowledge base chunks to form response
+            answer_text = (
+                f"{insufficient_prefix}When dealing with transition challenges, Parenting Base guidance recommends "
+                "acknowledging the child's emotions while clearly holding the limit and offering limited choice."
+            )
+            key_points = [
+                "Acknowledge the child's feeling before enforcing the limit.",
+                "Offer 2 clear options to give the child a sense of autonomy.",
+                "Consistently follow through with kindness and firmness."
+            ]
+            suggested_steps = [
+                "Acknowledge Emotion: Validation helps de-escalate emotional intensity.",
+                "Hold the Limit: Maintain the boundary predictably.",
+                "Offer Limited Choice: Give choices like 'Do you want to walk or hop to the car?'",
+                "Follow Through: Stay calm and carry out the transition."
+            ]
 
         return {
             "answer": answer_text,
@@ -159,7 +201,13 @@ class OpenAILLMProvider(LLMProvider):
     def model_name(self) -> str:
         return self._model_name
 
-    def generate_response(self, system_prompt: str, user_prompt: str, context: Dict[str, Any]) -> Dict[str, Any]:
+    def generate_response(
+        self,
+        system_prompt: str,
+        user_prompt: str,
+        context: Dict[str, Any],
+        language: str = "en"
+    ) -> Dict[str, Any]:
         if not self.api_key:
             raise LLMAuthenticationException("OpenAI API key is missing. Set LLM_API_KEY environment variable.")
 
@@ -230,7 +278,13 @@ class GeminiLLMProvider(LLMProvider):
     def model_name(self) -> str:
         return self._model_name
 
-    def generate_response(self, system_prompt: str, user_prompt: str, context: Dict[str, Any]) -> Dict[str, Any]:
+    def generate_response(
+        self,
+        system_prompt: str,
+        user_prompt: str,
+        context: Dict[str, Any],
+        language: str = "en"
+    ) -> Dict[str, Any]:
         if not self.api_key:
             raise LLMAuthenticationException("Gemini API key is missing. Set LLM_API_KEY environment variable.")
 
@@ -240,20 +294,23 @@ class GeminiLLMProvider(LLMProvider):
 
             url = f"{self.GEMINI_API_BASE}/{self._model_name}:generateContent?key={self.api_key}"
 
-            # Combine system + user prompt into Gemini's contents structure
-            full_prompt = (
+            # Use Gemini's systemInstruction field for proper system prompting
+            system_instruction_text = (
                 f"{system_prompt}\n\n"
-                f"IMPORTANT: You MUST respond with a valid JSON object only, with no markdown fences. "
+                f"IMPORTANT: You MUST respond with a valid JSON object only. "
                 f"The JSON must have exactly these keys: \"answer\", \"key_points\" (list of strings), "
-                f"\"suggested_steps\" (list of strings).\n\n"
-                f"{user_prompt}"
+                f"\"suggested_steps\" (list of strings). The language of every string VALUE is controlled "
+                f"by the RESPONSE LANGUAGE section above and MUST be followed exactly."
             )
 
             payload = {
+                "systemInstruction": {
+                    "parts": [{"text": system_instruction_text}]
+                },
                 "contents": [
                     {
                         "role": "user",
-                        "parts": [{"text": full_prompt}]
+                        "parts": [{"text": user_prompt}]
                     }
                 ],
                 "generationConfig": {

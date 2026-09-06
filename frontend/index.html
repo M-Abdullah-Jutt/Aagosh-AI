@@ -9,7 +9,17 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Nastaliq+Urdu:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+      (function () {
+        try {
+          if (localStorage.getItem('aaghosh_lang') === 'ur') {
+            document.documentElement.lang = 'ur';
+            document.documentElement.dir = 'rtl';
+          }
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body class="bg-calm-sand text-slate-800 antialiased font-sans">
     <div id="root"></div>

@@ -23,7 +23,18 @@ Aaghosh helps parents:
 
 ---
 
-## 2. Architecture & Technology Stack
+## 2. Project Workflow
+
+The Aaghosh platform is built around a continuous improvement loop designed to empower parents:
+
+1. **Assess**: Parents register, create child profiles, and define baseline observations (strengths, challenges, personality notes, and communication styles).
+2. **Track**: Parents set specific parenting goals and record daily behavior check-ins, creating a timeline of the child's development and behavioral patterns.
+3. **Guide**: Parents interact with the AI-powered Coaching module. The system securely passes the child's contextual data to the LLM (Gemini) to provide personalized, evidence-informed parenting guidance grounded in the child's unique tracked context.
+4. **Adapt**: Parents apply the insights, observe the outcomes, and adjust their goals and strategies over time.
+
+---
+
+## 3. Architecture & Technology Stack
 
 ```
 React Frontend (Vite + Tailwind CSS + Axios + AuthContext)
@@ -50,9 +61,24 @@ React Frontend (Vite + Tailwind CSS + Axios + AuthContext)
 - **Database**: Microsoft SQL Server (via `pyodbc` driver).
 - **Prohibited Databases**: PostgreSQL and MS Access are explicitly **not** used.
 
+### Architectural Design Principles
+
+1. **Separation of Concerns**:
+   - `frontend/`: Single Page Application handles UI presentation, user interactions, routing, and client-side state.
+   - `backend/`: Business rules, validation, domain models, and API logic.
+   - `AI Services`: Modularized and decoupled from core backend infrastructure.
+
+2. **Clean Layered Architecture (Backend)**:
+   - `api/`: Endpoint controllers & routers handling HTTP requests and responses.
+   - `schemas/`: Pydantic request & response validation schemas.
+   - `models/`: SQLAlchemy ORM entity definitions.
+   - `repositories/`: Data access layer isolating SQL queries.
+   - `services/`: Core domain business logic (e.g., Coach Service for LLM orchestration).
+   - `core/`: Global settings, constants, and configuration handlers.
+
 ---
 
-## 3. Database Schema Overview (Microsoft SQL Server)
+## 4. Database Schema Overview (Microsoft SQL Server)
 
 1. **`users` Table**: Parent accounts with Argon2id password hashing.
 2. **`children` Table**: Child records linked via `user_id` Foreign Key.
@@ -61,7 +87,7 @@ React Frontend (Vite + Tailwind CSS + Axios + AuthContext)
 
 ---
 
-## 4. Environment Variables
+## 5. Environment Variables
 
 ### Backend (`backend/.env`)
 ```env
@@ -95,7 +121,7 @@ VITE_API_BASE_URL=http://localhost:8000/api/v1
 
 ---
 
-## 5. Local Setup Instructions
+## 6. Local Setup Instructions
 
 ### Prerequisites
 - **Node.js**: v18.0.0 or higher
@@ -146,7 +172,7 @@ VITE_API_BASE_URL=http://localhost:8000/api/v1
 
 ---
 
-## 6. API Endpoints
+## 7. API Endpoints
 
 ### Authentication
 - `POST /api/v1/auth/register` - Parent registration
@@ -173,7 +199,7 @@ VITE_API_BASE_URL=http://localhost:8000/api/v1
 
 ---
 
-## 7. Automated Testing Instructions
+## 8. Automated Testing Instructions
 
 Run all 26 unit & integration tests using pytest:
 ```bash
@@ -183,7 +209,7 @@ venv\Scripts\pytest.exe -v
 
 ---
 
-## 8. Development Scope Status
+## 9. Development Scope Status
 
 - ✅ **Step 1**: Foundation & Core Setup
 - ✅ **Step 2**: Database Configuration (SQL Server)

@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../i18n/LanguageContext';
 import { Mail, Lock, Eye, EyeOff, HeartHandshake, AlertCircle } from 'lucide-react';
 
 export const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { login } = useAuth();
+  const { t } = useLanguage();
 
   const [formData, setFormData] = useState({
     email: '',
@@ -28,7 +30,7 @@ export const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.email.trim() || !formData.password) {
-      setError('Please enter both email and password.');
+      setError(t('auth.errBothFields'));
       return;
     }
 
@@ -53,8 +55,8 @@ export const Login = () => {
           <div className="inline-flex items-center justify-center w-14 h-14 bg-emerald-100/70 text-emerald-700 rounded-2xl mb-4 shadow-sm">
             <HeartHandshake className="w-8 h-8" />
           </div>
-          <h1 className="text-2xl font-bold text-slate-800">Welcome back to Aaghosh</h1>
-          <p className="text-sm text-slate-500 mt-1">Sign in to your personalized parenting companion</p>
+          <h1 className="text-2xl font-bold text-slate-800">{t('auth.loginTitle')}</h1>
+          <p className="text-sm text-slate-500 mt-1">{t('auth.loginSubtitle')}</p>
         </div>
 
         {/* Error Alert */}
@@ -69,7 +71,7 @@ export const Login = () => {
         <form onSubmit={handleSubmit} className="space-y-5" noValidate>
           <div>
             <label htmlFor="email" className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">
-              Email Address
+              {t('auth.email')}
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -82,7 +84,7 @@ export const Login = () => {
                 required
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="parent@example.com"
+                placeholder={t('auth.emailPlaceholder')}
                 className="w-full pl-11 pr-4 py-3 bg-slate-50/50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
               />
             </div>
@@ -90,7 +92,7 @@ export const Login = () => {
 
           <div>
             <label htmlFor="password" className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">
-              Password
+              {t('auth.password')}
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -124,19 +126,19 @@ export const Login = () => {
             {isSubmitting ? (
               <>
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                <span>Signing in...</span>
+                <span>{t('auth.signingIn')}</span>
               </>
             ) : (
-              <span>Sign In</span>
+              <span>{t('auth.signIn')}</span>
             )}
           </button>
         </form>
 
         {/* Footer */}
         <div className="mt-8 text-center text-sm text-slate-600 border-t border-slate-100 pt-6">
-          Don't have an account?{' '}
+          {t('auth.noAccount')}{' '}
           <Link to="/register" className="font-semibold text-emerald-700 hover:text-emerald-800 transition">
-            Create an account
+            {t('auth.noAccountLink')}
           </Link>
         </div>
       </div>

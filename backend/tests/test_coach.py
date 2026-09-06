@@ -117,6 +117,11 @@ def test_child(db: Session, test_parent_user: User) -> Child:
 client = TestClient(app)
 
 
+@pytest.fixture(autouse=True)
+def override_llm_provider(monkeypatch):
+    monkeypatch.setattr("app.coach.service.get_llm_provider", lambda: MockLLMProvider())
+
+
 # 1. Valid coach request
 def test_valid_coach_request(test_child: Child, parent_auth_headers: dict):
     payload = {

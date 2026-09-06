@@ -12,6 +12,7 @@ from app.coach.sanitizer import LLMContextSanitizer
 from app.coach.prompt_builder import ParentingPromptBuilder
 from app.coach.llm_provider import (
     LLMProvider,
+    MockLLMProvider,
     get_llm_provider,
     LLMTimeoutException,
     LLMAuthenticationException,
@@ -19,6 +20,11 @@ from app.coach.llm_provider import (
     LLMProviderException
 )
 from app.coach.safety import ParentingSafetyValidator
+from app.coach.languages import (
+    DEFAULT_LANGUAGE,
+    get_strings,
+    normalize_language,
+)
 from app.schemas.coach_schemas import (
     CoachResponse,
     ContextUsed,
@@ -192,9 +198,12 @@ class ParentingCoachService:
         conversation_id: str,
         message_text: str,
         period: str = "30d",
+        language: str = DEFAULT_LANGUAGE,
         llm_provider: Optional[LLMProvider] = None
     ) -> CoachResponse:
         start_time = time.time()
+        resolved_language = normalize_language(language)
+        strings = get_strings(resolved_language)
         self._verify_child_ownership(db, child_id, parent_user_id)
         conv = self._verify_conversation_ownership(db, conversation_id, parent_user_id, child_id)
 
@@ -235,7 +244,8 @@ class ParentingCoachService:
         system_prompt, user_prompt = ParentingPromptBuilder.build_prompts(
             parent_message=message_text,
             sanitized_context=sanitized_context,
-            conversation_history=formatted_history
+            conversation_history=formatted_history,
+            language=resolved_language
         )
 
         # LLM Provider Execution
@@ -243,7 +253,9 @@ class ParentingCoachService:
         logger.info(f"[Coach Service] Invoking provider '{provider.provider_name}' for conversation_id={conversation_id}")
 
         try:
-            raw_output = provider.generate_response(system_prompt, user_prompt, sanitized_context)
+            raw_output = provider.generate_response(
+                system_prompt, user_prompt, sanitized_context, language=resolved_language
+            )
         except LLMTimeoutException as e:
             logger.error(f"[Coach Service] Timeout: {e}")
             raise HTTPException(status_code=status.HTTP_504_GATEWAY_TIMEOUT, detail="The AI response service timed out.")
@@ -251,9 +263,8 @@ class ParentingCoachService:
             logger.error(f"[Coach Service] Auth error: {e}")
             raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY, detail="AI service authentication error.")
         except LLMRateLimitException as e:
-            logger.warning(f"[Coach Service] Rate limit hit on provider '{provider.provider_name}': {e}. Falling back to MockLLMProvider.")
-            fallback = MockLLMProvider()
-            raw_output = fallback.generate_response(system_prompt, user_prompt, sanitized_context)
+            logger.warning(f"[Coach Service] Rate limit hit on provider '{provider.provider_name}': {e}.")
+            raise HTTPException(status_code=status.HTTP_429_TOO_MANY_REQUESTS, detail="AI service rate limit exceeded. Please try again in a few moments.")
         except LLMProviderException as e:
             logger.error(f"[Coach Service] Provider error: {e}")
             raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY, detail="Failed to generate AI response from provider.")
@@ -267,7 +278,7 @@ class ParentingCoachService:
         except Exception as e:
             logger.error(f"[Coach Service] Schema validation error: {e}")
             validated_output = RawLLMOutput(
-                answer="I'm sorry, I was unable to format the parenting response properly. Please try rephrasing your question.",
+                answer=strings["format_error"],
                 key_points=[],
                 suggested_steps=[]
             )
@@ -279,9 +290,9 @@ class ParentingCoachService:
         if not is_safe:
             logger.warning(f"[Coach Service] Safety validation failed. Violations: {safety_violations}")
             validated_output = RawLLMOutput(
-                answer="I can offer general parenting guidance based on approved resources, but I cannot provide clinical diagnoses, psychiatric labels, or unsupported claims about behavioral causes.",
-                key_points=["Focus on observable behaviors and positive routines."],
-                suggested_steps=["Consult with your child's pediatrician or healthcare provider for clinical assessments."]
+                answer=strings["safety_block_answer"],
+                key_points=list(strings["safety_block_key_points"]),
+                suggested_steps=list(strings["safety_block_steps"])
             )
 
         # Programmatic Source References Generation
@@ -303,9 +314,10 @@ class ParentingCoachService:
             "retrieval_count": retrieval_count,
             "model": provider.model_name,
             "provider": provider.provider_name,
+            "language": resolved_language,
             "key_points": validated_output.key_points,
             "suggested_steps": validated_output.suggested_steps,
-            "disclaimer": "This guidance is based on the parenting resources available in Aaghosh AI and is not a clinical diagnosis.",
+            "disclaimer": strings["disclaimer"],
             "context_used": context_used.model_dump() if hasattr(context_used, "model_dump") else context_used.dict()
         }
 
@@ -350,8 +362,11 @@ class ParentingCoachService:
         parent_user_id: str,
         parent_message: str,
         period: str = "30d",
+        language: str = DEFAULT_LANGUAGE,
         llm_provider: Optional[LLMProvider] = None
     ) -> CoachResponse:
+        resolved_language = normalize_language(language)
+        strings = get_strings(resolved_language)
         self._verify_child_ownership(db, child_id, parent_user_id)
 
         assembled_obj = ContextAssemblyService.build_context(
@@ -367,12 +382,16 @@ class ParentingCoachService:
         retrieval_count = len(retrieved_knowledge)
 
         sanitized_context = LLMContextSanitizer.sanitize(assembled_context)
-        system_prompt, user_prompt = ParentingPromptBuilder.build_prompts(parent_message, sanitized_context)
+        system_prompt, user_prompt = ParentingPromptBuilder.build_prompts(
+            parent_message, sanitized_context, language=resolved_language
+        )
 
         provider = llm_provider or get_llm_provider()
 
         try:
-            raw_output = provider.generate_response(system_prompt, user_prompt, sanitized_context)
+            raw_output = provider.generate_response(
+                system_prompt, user_prompt, sanitized_context, language=resolved_language
+            )
         except LLMTimeoutException as e:
             raise HTTPException(status_code=status.HTTP_504_GATEWAY_TIMEOUT, detail="The AI response service timed out.")
         except LLMAuthenticationException as e:
@@ -386,7 +405,7 @@ class ParentingCoachService:
             validated_output = RawLLMOutput(**raw_output)
         except Exception:
             validated_output = RawLLMOutput(
-                answer="I'm sorry, I was unable to format the parenting response properly. Please try rephrasing your question.",
+                answer=strings["format_error"],
                 key_points=[],
                 suggested_steps=[]
             )
@@ -396,9 +415,9 @@ class ParentingCoachService:
 
         if not is_safe:
             validated_output = RawLLMOutput(
-                answer="I can offer general parenting guidance based on approved resources, but I cannot provide clinical diagnoses, psychiatric labels, or unsupported claims about behavioral causes.",
-                key_points=["Focus on observable behaviors and positive routines."],
-                suggested_steps=["Consult with your child's pediatrician or healthcare provider for clinical assessments."]
+                answer=strings["safety_block_answer"],
+                key_points=list(strings["safety_block_key_points"]),
+                suggested_steps=list(strings["safety_block_steps"])
             )
 
         source_references = ParentingSafetyValidator.generate_programmatic_citations(retrieved_knowledge)

@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime, date
 from typing import Optional, List, TYPE_CHECKING
-from sqlalchemy import String, Date, Text, Boolean, DateTime, ForeignKey, func
+from sqlalchemy import String, Date, Text, Boolean, DateTime, ForeignKey, func, Unicode, UnicodeText
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.base import Base
 
@@ -28,7 +28,7 @@ class Child(Base):
         nullable=False
     )
     first_name: Mapped[str] = mapped_column(
-        String(100),
+        Unicode(100),
         nullable=False
     )
     date_of_birth: Mapped[date] = mapped_column(
@@ -98,19 +98,19 @@ class ChildProfile(Base):
         nullable=False
     )
     strengths: Mapped[Optional[str]] = mapped_column(
-        Text,
+        UnicodeText,
         nullable=True
     )
     challenges: Mapped[Optional[str]] = mapped_column(
-        Text,
+        UnicodeText,
         nullable=True
     )
     personality_notes: Mapped[Optional[str]] = mapped_column(
-        Text,
+        UnicodeText,
         nullable=True
     )
     communication_style: Mapped[Optional[str]] = mapped_column(
-        Text,
+        UnicodeText,
         nullable=True
     )
     created_at: Mapped[datetime] = mapped_column(
@@ -154,7 +154,7 @@ class ParentingGoal(Base):
         nullable=False
     )
     description: Mapped[Optional[str]] = mapped_column(
-        Text,
+        UnicodeText,
         nullable=True
     )
     priority: Mapped[str] = mapped_column(

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { childrenService } from '../../services/childrenService';
 import { GOAL_TYPES, GOAL_PRIORITIES, getGoalTypeLabel, getPriorityBadge } from '../../utils/goalConstants';
+import { useLanguage } from '../../i18n/LanguageContext';
 import {
   ArrowLeft,
   Target,
@@ -17,6 +18,7 @@ import {
 
 export const GoalsPage = () => {
   const { childId } = useParams();
+  const { t } = useLanguage();
 
   const [child, setChild] = useState(null);
   const [goals, setGoals] = useState([]);
@@ -203,7 +205,7 @@ export const GoalsPage = () => {
           ) : (
             <div className="space-y-3">
               {activeGoals.map((goal) => {
-                const priority = getPriorityBadge(goal.priority);
+                const priority = getPriorityBadge(t, goal.priority);
                 return (
                   <div
                     key={goal.id}
@@ -213,7 +215,7 @@ export const GoalsPage = () => {
                       <div className="flex items-center space-x-2 flex-wrap gap-1">
                         <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                         <span className="font-bold text-slate-900 text-sm">
-                          {getGoalTypeLabel(goal.goal_type)}
+                          {getGoalTypeLabel(t, goal.goal_type)}
                         </span>
                         <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded border uppercase tracking-wider ${priority.color}`}>
                           {priority.label}
@@ -273,7 +275,7 @@ export const GoalsPage = () => {
                 >
                   <div className="space-y-1">
                     <span className="font-semibold text-slate-700 text-sm line-through">
-                      {getGoalTypeLabel(goal.goal_type)}
+                      {getGoalTypeLabel(t, goal.goal_type)}
                     </span>
                     {goal.description && (
                       <p className="text-xs text-slate-500">{goal.description}</p>
@@ -330,7 +332,7 @@ export const GoalsPage = () => {
                 >
                   {GOAL_TYPES.map((type) => (
                     <option key={type.id} value={type.id}>
-                      {type.label} ({type.category})
+                      {t(type.labelKey)} ({t(type.categoryKey)})
                     </option>
                   ))}
                 </select>
@@ -347,7 +349,7 @@ export const GoalsPage = () => {
                 >
                   {GOAL_PRIORITIES.map((p) => (
                     <option key={p.id} value={p.id}>
-                      {p.label}
+                      {t(p.labelKey)}
                     </option>
                   ))}
                 </select>

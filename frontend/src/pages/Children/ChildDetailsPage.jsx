@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { childrenService } from '../../services/childrenService';
 import { getGoalTypeLabel, getPriorityBadge } from '../../utils/goalConstants';
+import { useLanguage } from '../../i18n/LanguageContext';
 import {
   ArrowLeft,
   User,
@@ -20,6 +21,7 @@ import {
 export const ChildDetailsPage = () => {
   const { childId } = useParams();
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const [child, setChild] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -288,7 +290,7 @@ export const ChildDetailsPage = () => {
               {/* Active Goals */}
               <div className="space-y-3">
                 {activeGoals.map((goal) => {
-                  const priority = getPriorityBadge(goal.priority);
+                  const priority = getPriorityBadge(t, goal.priority);
                   return (
                     <div
                       key={goal.id}
@@ -298,7 +300,7 @@ export const ChildDetailsPage = () => {
                         <div className="flex items-center space-x-2">
                           <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                           <span className="font-bold text-slate-800 text-sm">
-                            {getGoalTypeLabel(goal.goal_type)}
+                            {getGoalTypeLabel(t, goal.goal_type)}
                           </span>
                           <span className={`text-[10px] font-bold px-2 py-0.5 rounded border uppercase tracking-wider ${priority.color}`}>
                             {priority.label}
@@ -330,7 +332,7 @@ export const ChildDetailsPage = () => {
                       >
                         <div className="flex items-center space-x-2">
                           <XCircle className="w-3.5 h-3.5 text-slate-400" />
-                          <span className="font-medium text-slate-700">{getGoalTypeLabel(goal.goal_type)}</span>
+                          <span className="font-medium text-slate-700">{getGoalTypeLabel(t, goal.goal_type)}</span>
                         </div>
                         <span className="text-[10px] text-slate-400 uppercase">Inactive</span>
                       </div>

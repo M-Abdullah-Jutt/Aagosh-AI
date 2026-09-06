@@ -17,6 +17,12 @@ from app.schemas.coach_schemas import (
     MessageItemResponse
 )
 from app.coach.service import coach_service
+from app.coach.languages import (
+    DEFAULT_LANGUAGE,
+    get_goal_type_label,
+    get_strings,
+    normalize_language,
+)
 from app.repositories.coach_repository import coach_repository
 
 logger = logging.getLogger(__name__)
@@ -59,6 +65,10 @@ def create_conversation(
 def initialize_conversation(
     child_id: str = Path(..., min_length=1, description="The ID of the child"),
     conversation_id: str = Path(..., min_length=1, description="The ID of the conversation"),
+    language: str = Query(
+        DEFAULT_LANGUAGE,
+        description="Language the welcome message must be written in ('en' or 'ur')"
+    ),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ) -> MessageItemResponse:
@@ -68,7 +78,11 @@ def initialize_conversation(
     - Active parenting goals
     - Whether check-in data exists
     Then asks the parent about daily emotional triggers.
+    Written in the language requested by the parent's UI.
     """
+    resolved_language = normalize_language(language)
+    strings = get_strings(resolved_language)
+
     # Verify child ownership
     child = db.query(Child).filter(Child.id == child_id).first()
     if not child:
@@ -99,9 +113,13 @@ def initialize_conversation(
         )
 
     # Build personalized welcome message
-    child_name = child.first_name or "your child"
+    child_name = child.first_name or strings["child_fallback"]
     age_years = getattr(child, "age_years", None)
-    age_str = f"{age_years} years old" if age_years is not None else "at their age"
+    age_str = (
+        strings["age_years"].format(years=age_years)
+        if age_years is not None
+        else strings["age_unknown"]
+    )
 
     # Pull profile details if present
     profile = getattr(child, "profile", None)
@@ -109,28 +127,30 @@ def initialize_conversation(
     challenges_snippet = ""
     if profile:
         if getattr(profile, "strengths", None):
-            strengths_snippet = f" I can see you've noted some strengths for {child_name}: {profile.strengths[:100]}."
+            strengths_snippet = strings["welcome_strengths"].format(
+                child_name=child_name, text=profile.strengths[:100]
+            )
         if getattr(profile, "challenges", None):
-            challenges_snippet = f" You've also mentioned some growth areas: {profile.challenges[:100]}."
+            challenges_snippet = strings["welcome_challenges"].format(
+                child_name=child_name, text=profile.challenges[:100]
+            )
 
     # Pull active goals
     goals = getattr(child, "goals", []) or []
     active_goals = [g for g in goals if getattr(g, "is_active", False)]
     goals_text = ""
     if active_goals:
-        goal_labels = [g.goal_type.replace("_", " ").title() for g in active_goals[:3]]
-        goals_text = f" Your active parenting focus areas include: {', '.join(goal_labels)}."
+        goal_labels = [
+            get_goal_type_label(g.goal_type, resolved_language) for g in active_goals[:3]
+        ]
+        goals_text = strings["welcome_goals"].format(goals=", ".join(goal_labels))
 
     welcome_text = (
-        f"Hi! I'm Aaghosh AI, your personal parenting companion.\n\n"
-        f"I'm here to support you with evidence-informed guidance tailored to {child_name}, "
-        f"who is {age_str}.{strengths_snippet}{challenges_snippet}{goals_text}\n\n"
-        f"To give you the most helpful guidance, I'd love to understand {child_name}'s daily patterns better. "
-        f"Could you tell me about any emotional triggers or challenging situations you've been observing lately? "
-        f"For example: transitions (ending screen time, bedtime), mealtimes, sibling interactions, "
-        f"or moments when strong emotions tend to arise.\n\n"
-        f"You can also ask me anything directly — about behavior, routines, communication, or anything "
-        f"on your mind as a parent. I'm here to help!"
+        f"{strings['greeting']}\n\n"
+        f"{strings['welcome_support'].format(child_name=child_name, age=age_str)}"
+        f"{strengths_snippet}{challenges_snippet}{goals_text}\n\n"
+        f"{strings['welcome_ask'].format(child_name=child_name)}\n\n"
+        f"{strings['welcome_invite']}"
     )
 
     # Persist as assistant message
@@ -143,9 +163,10 @@ def initialize_conversation(
         metadata_info={
             "key_points": [],
             "suggested_steps": [],
-            "disclaimer": "Aaghosh AI is not a medical or clinical tool.",
+            "disclaimer": strings["welcome_disclaimer"],
             "provider": "system",
-            "model": "welcome-init"
+            "model": "welcome-init",
+            "language": resolved_language
         }
     )
 
@@ -248,7 +269,8 @@ def send_message_in_conversation(
         child_id=child_id,
         conversation_id=conversation_id,
         message_text=payload.message,
-        period=payload.period
+        period=payload.period,
+        language=payload.language
     )
 
 
@@ -273,5 +295,6 @@ def generate_coach_response(
         child_id=child_id,
         parent_user_id=current_user.id,
         parent_message=request.message,
-        period=request.period
+        period=request.period,
+        language=request.language
     )

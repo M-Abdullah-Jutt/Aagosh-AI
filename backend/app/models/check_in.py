@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime, date
 from typing import Optional, List
-from sqlalchemy import String, Date, Text, Integer, DateTime, ForeignKey, func
+from sqlalchemy import String, Date, Text, Integer, DateTime, ForeignKey, func, UnicodeText
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.base import Base
 
@@ -32,7 +32,7 @@ class DailyCheckIn(Base):
         nullable=False
     )
     general_notes: Mapped[Optional[str]] = mapped_column(
-        Text,
+        UnicodeText,
         nullable=True
     )
     created_at: Mapped[datetime] = mapped_column(
@@ -89,7 +89,7 @@ class BehaviorEvent(Base):
         nullable=True
     )
     behavior_description: Mapped[str] = mapped_column(
-        Text,
+        UnicodeText,
         nullable=False
     )
     parent_response: Mapped[Optional[str]] = mapped_column(
@@ -101,7 +101,7 @@ class BehaviorEvent(Base):
         nullable=True
     )
     event_notes: Mapped[Optional[str]] = mapped_column(
-        Text,
+        UnicodeText,
         nullable=True
     )
     created_at: Mapped[datetime] = mapped_column(

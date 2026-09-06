@@ -15,10 +15,15 @@ export const coachService = {
    * Auto-initialize a conversation with a personalized AI welcome message
    * @param {number|string} childId
    * @param {string} conversationId
+   * @param {string} language 'en' | 'ur'
    */
-  async initializeConversation(childId, conversationId) {
+  async initializeConversation(childId, conversationId, language = 'en', signal = null) {
+    const config = { params: { language }, timeout: 60000 };
+    if (signal) config.signal = signal;
     const response = await api.post(
-      `/children/${childId}/coach/conversations/${conversationId}/initialize`
+      `/children/${childId}/coach/conversations/${conversationId}/initialize`,
+      null,
+      config
     );
     return response.data;
   },
@@ -62,12 +67,16 @@ export const coachService = {
    * @param {string} conversationId 
    * @param {string} message 
    * @param {string} period 
+   * @param {string} language 'en' | 'ur'
    */
-  async sendMessage(childId, conversationId, message, period = '30d') {
+  async sendMessage(childId, conversationId, message, period = '30d', language = 'en', signal = null) {
+    const config = { timeout: 60000 };
+    if (signal) config.signal = signal;
     const response = await api.post(`/children/${childId}/coach/conversations/${conversationId}/messages`, {
       message,
-      period
-    });
+      period,
+      language
+    }, config);
     return response.data;
   },
 
@@ -76,11 +85,13 @@ export const coachService = {
    * @param {number|string} childId 
    * @param {string} message 
    * @param {string} period 
+   * @param {string} language 'en' | 'ur'
    */
-  async askCoach(childId, message, period = '30d') {
+  async askCoach(childId, message, period = '30d', language = 'en') {
     const response = await api.post(`/children/${childId}/coach`, {
       message,
-      period
+      period,
+      language
     });
     return response.data;
   }

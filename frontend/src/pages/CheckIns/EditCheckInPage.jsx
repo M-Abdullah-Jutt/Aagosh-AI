@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { checkInService } from '../../services/checkInService';
 import { OVERALL_MOODS } from '../../utils/checkInConstants';
+import { useLanguage } from '../../i18n/LanguageContext';
+import { localizeOptions } from '../../utils/i18nOptions';
 import { ArrowLeft, Calendar, Smile, AlertCircle, Save } from 'lucide-react';
 
 export const EditCheckInPage = () => {
   const { childId, checkInId } = useParams();
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const [formData, setFormData] = useState({
     check_in_date: '',
@@ -30,7 +33,7 @@ export const EditCheckInPage = () => {
         });
       } catch (err) {
         console.error('Failed to load check-in:', err);
-        setError('Check-in record not found or access denied.');
+        setError(t('checkIns.notFoundError'));
       } finally {
         setIsLoading(false);
       }
@@ -43,7 +46,7 @@ export const EditCheckInPage = () => {
     e.preventDefault();
 
     if (!formData.check_in_date) {
-      setError('Please select check-in date.');
+      setError(t('checkIns.errDate'));
       return;
     }
 
@@ -60,7 +63,7 @@ export const EditCheckInPage = () => {
       navigate(`/children/${childId}/check-ins/${checkInId}`, { replace: true });
     } catch (err) {
       console.error('Failed to update check-in:', err);
-      setError('Failed to update check-in details.');
+      setError(t('checkIns.errUpdate'));
     } finally {
       setIsSubmitting(false);
     }
@@ -71,7 +74,7 @@ export const EditCheckInPage = () => {
       <div className="min-h-[80vh] flex items-center justify-center bg-slate-50/50">
         <div className="flex flex-col items-center space-y-3">
           <div className="w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-sm font-medium text-emerald-800">Loading check-in data...</p>
+          <p className="text-sm font-medium text-emerald-800">{t('checkIns.editLoading')}</p>
         </div>
       </div>
     );
@@ -85,13 +88,13 @@ export const EditCheckInPage = () => {
           className="inline-flex items-center space-x-2 text-sm font-medium text-slate-500 hover:text-emerald-700 transition"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Back to Check-In Details</span>
+          <span>{t('checkIns.backToDetails')}</span>
         </Link>
 
         <div className="bg-white border border-slate-200/80 rounded-2xl shadow-sm p-8">
           <div className="mb-8 pb-6 border-b border-slate-100">
-            <h1 className="text-2xl font-bold text-slate-900">Edit Daily Check-In</h1>
-            <p className="text-sm text-slate-500 mt-1">Update overall mood and general notes.</p>
+            <h1 className="text-2xl font-bold text-slate-900">{t('checkIns.editTitle')}</h1>
+            <p className="text-sm text-slate-500 mt-1">{t('checkIns.editSubtitle')}</p>
           </div>
 
           {error && (
@@ -104,10 +107,10 @@ export const EditCheckInPage = () => {
           <form onSubmit={handleSubmit} className="space-y-6" noValidate>
             <div>
               <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">
-                Overall Day / Mood
+                {t('checkIns.overallDayMood')}
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                {OVERALL_MOODS.map((m) => (
+                {localizeOptions(t, OVERALL_MOODS).map((m) => (
                   <button
                     key={m.id}
                     type="button"
@@ -126,7 +129,7 @@ export const EditCheckInPage = () => {
 
             <div>
               <label htmlFor="check_in_date" className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">
-                Check-In Date
+                {t('checkIns.checkInDate')}
               </label>
               <input
                 id="check_in_date"
@@ -140,7 +143,7 @@ export const EditCheckInPage = () => {
 
             <div>
               <label htmlFor="general_notes" className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">
-                General Notes
+                {t('checkIns.generalNotes')}
               </label>
               <textarea
                 id="general_notes"
@@ -156,7 +159,7 @@ export const EditCheckInPage = () => {
                 to={`/children/${childId}/check-ins/${checkInId}`}
                 className="px-5 py-3 text-sm font-semibold text-slate-600 hover:text-slate-800 transition"
               >
-                Cancel
+                {t('common.cancel')}
               </Link>
               <button
                 type="submit"
@@ -166,12 +169,12 @@ export const EditCheckInPage = () => {
                 {isSubmitting ? (
                   <>
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    <span>Saving...</span>
+                    <span>{t('common.saving')}</span>
                   </>
                 ) : (
                   <>
                     <Save className="w-4 h-4" />
-                    <span>Save Changes</span>
+                    <span>{t('common.saveChanges')}</span>
                   </>
                 )}
               </button>

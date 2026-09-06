@@ -1,11 +1,20 @@
 import React from 'react';
 import { NavLink, Link } from 'react-router-dom';
-import { Heart, Activity, User, LogOut, LayoutDashboard, LogIn, UserPlus, BookOpen } from 'lucide-react';
-import { APP_NAME } from '../utils/constants';
+import { Heart, User, LogOut, LayoutDashboard, LogIn, UserPlus, BookOpen } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../i18n/LanguageContext';
+import LanguageSwitcher from './LanguageSwitcher';
 
 export const Navbar = () => {
   const { user, isAuthenticated, logout } = useAuth();
+  const { t } = useLanguage();
+
+  const navLinkClass = ({ isActive }) =>
+    `px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center space-x-1.5 ${
+      isActive
+        ? 'bg-emerald-50 text-emerald-700 font-semibold'
+        : 'text-stone-600 hover:text-slate-900 hover:bg-stone-100/70'
+    }`;
 
   return (
     <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-stone-200/60 shadow-sm">
@@ -18,73 +27,42 @@ export const Navbar = () => {
             </div>
             <div>
               <span className="font-semibold text-lg text-slate-900 tracking-tight block leading-none">
-                {APP_NAME}
+                {t('app.name')}
               </span>
               <span className="text-[10px] text-stone-500 font-medium tracking-wider uppercase">
-                Parenting Companion
+                {t('nav.subtitle')}
               </span>
             </div>
           </NavLink>
 
           {/* Navigation Links */}
           <nav className="flex items-center space-x-2 sm:space-x-3">
-            <NavLink
-              to="/"
-              className={({ isActive }) =>
-                `px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                  isActive
-                    ? 'bg-emerald-50 text-emerald-700 font-semibold'
-                    : 'text-stone-600 hover:text-slate-900 hover:bg-stone-100/70'
-                }`
-              }
-            >
-              Home
+            <NavLink to="/" className={navLinkClass}>
+              {t('nav.home')}
             </NavLink>
 
             {isAuthenticated && (
               <>
-                <NavLink
-                  to="/dashboard"
-                  className={({ isActive }) =>
-                    `px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center space-x-1.5 ${
-                      isActive
-                        ? 'bg-emerald-50 text-emerald-700 font-semibold'
-                        : 'text-stone-600 hover:text-slate-900 hover:bg-stone-100/70'
-                    }`
-                  }
-                >
+                <NavLink to="/dashboard" className={navLinkClass}>
                   <LayoutDashboard className="w-4 h-4 text-emerald-600" />
-                  <span>Dashboard</span>
+                  <span>{t('nav.dashboard')}</span>
                 </NavLink>
-                <NavLink
-                  to="/children"
-                  className={({ isActive }) =>
-                    `px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center space-x-1.5 ${
-                      isActive
-                        ? 'bg-emerald-50 text-emerald-700 font-semibold'
-                        : 'text-stone-600 hover:text-slate-900 hover:bg-stone-100/70'
-                    }`
-                  }
-                >
+                <NavLink to="/children" className={navLinkClass}>
                   <User className="w-4 h-4 text-emerald-600" />
-                  <span>Children</span>
+                  <span>{t('nav.children')}</span>
                 </NavLink>
               </>
             )}
 
-            <NavLink
-              to="/health"
-              className={({ isActive }) =>
-                `px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center space-x-1.5 ${
-                  isActive
-                    ? 'bg-emerald-50 text-emerald-700 font-semibold'
-                    : 'text-stone-600 hover:text-slate-900 hover:bg-stone-100/70'
-                }`
-              }
-            >
+            <NavLink to="/health" className={navLinkClass}>
               <BookOpen className="w-4 h-4 text-emerald-600" />
-              <span>Knowledge Base</span>
+              <span>{t('nav.knowledgeBase')}</span>
             </NavLink>
+
+            {/* Language Selector */}
+            <div className="flex items-center space-x-2 pl-2 border-l border-stone-200">
+              <LanguageSwitcher />
+            </div>
 
             {/* Auth Buttons / Profile Indicator */}
             {isAuthenticated ? (
@@ -94,7 +72,8 @@ export const Navbar = () => {
                 </span>
                 <button
                   onClick={logout}
-                  title="Log Out"
+                  title={t('nav.logOut')}
+                  aria-label={t('nav.logOut')}
                   className="p-2 text-stone-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition"
                 >
                   <LogOut className="w-4 h-4" />
@@ -107,14 +86,14 @@ export const Navbar = () => {
                   className="px-3 py-1.5 text-sm font-medium text-slate-700 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg transition flex items-center space-x-1.5"
                 >
                   <LogIn className="w-4 h-4 text-slate-500" />
-                  <span>Sign In</span>
+                  <span>{t('nav.signIn')}</span>
                 </Link>
                 <Link
                   to="/register"
                   className="px-3.5 py-1.5 text-sm font-medium bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg shadow-sm hover:shadow transition flex items-center space-x-1.5"
                 >
                   <UserPlus className="w-4 h-4" />
-                  <span>Register</span>
+                  <span>{t('nav.register')}</span>
                 </Link>
               </div>
             )}

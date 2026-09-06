@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from sqlalchemy import String, Boolean, DateTime, func
+from sqlalchemy import String, Boolean, DateTime, func, Unicode
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.base import Base
 
@@ -17,7 +17,7 @@ class User(Base):
         default=lambda: str(uuid.uuid4())
     )
     full_name: Mapped[str] = mapped_column(
-        String(255),
+        Unicode(255),
         nullable=False
     )
     email: Mapped[str] = mapped_column(

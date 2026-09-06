@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { childrenService } from '../../services/childrenService';
+import { useLanguage } from '../../i18n/LanguageContext';
 import { ArrowLeft, User, Heart, AlertCircle, Save } from 'lucide-react';
 
 export const EditChildPage = () => {
   const { childId } = useParams();
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const [formData, setFormData] = useState({
     first_name: '',
@@ -37,7 +39,7 @@ export const EditChildPage = () => {
         });
       } catch (err) {
         console.error('Failed to fetch child:', err);
-        setError('Child profile not found or access denied.');
+        setError(t('childForm.errNotFound'));
       } finally {
         setIsLoading(false);
       }

@@ -16,8 +16,6 @@ import CreateCheckInPage from '../pages/CheckIns/CreateCheckInPage';
 import CheckInDetailsPage from '../pages/CheckIns/CheckInDetailsPage';
 import EditCheckInPage from '../pages/CheckIns/EditCheckInPage';
 import AnalyticsPage from '../pages/Analytics/AnalyticsPage';
-import KnowledgeSearchPage from '../pages/Knowledge/KnowledgeSearchPage';
-import CoachDevPage from '../pages/Coach/CoachDevPage';
 import CoachPage from '../pages/Coach/CoachPage';
 import ProtectedRoute from '../components/ProtectedRoute';
 
@@ -79,7 +77,7 @@ export const AppRoutes = () => {
         }
       />
 
-      {/* Step 5 Check-Ins Protected Routes */}
+      {/* Check-Ins */}
       <Route
         path="/children/:childId/check-ins"
         element={
@@ -113,7 +111,7 @@ export const AppRoutes = () => {
         }
       />
 
-      {/* Step 6 Analytics Protected Route */}
+      {/* Analytics */}
       <Route
         path="/children/:childId/analytics"
         element={
@@ -123,32 +121,12 @@ export const AppRoutes = () => {
         }
       />
 
-      {/* Step 8C Production Parenting Coach Route */}
+      {/* Parenting Coach */}
       <Route
         path="/children/:childId/coach"
         element={
           <ProtectedRoute>
             <CoachPage />
-          </ProtectedRoute>
-        }
-      />
-
-      {/* Step 7 Developer Knowledge Base Search Route */}
-      <Route
-        path="/dev/knowledge"
-        element={
-          <ProtectedRoute>
-            <KnowledgeSearchPage />
-          </ProtectedRoute>
-        }
-      />
-
-      {/* Step 8B Grounded LLM Coach Developer Route */}
-      <Route
-        path="/dev/coach"
-        element={
-          <ProtectedRoute>
-            <CoachDevPage />
           </ProtectedRoute>
         }
       />

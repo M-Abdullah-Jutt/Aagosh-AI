@@ -9,6 +9,7 @@ import {
   getResponseLabel,
   getOutcomeLabel,
 } from '../../utils/checkInConstants';
+import { useLanguage } from '../../i18n/LanguageContext';
 import {
   ArrowLeft,
   Calendar,
@@ -26,6 +27,7 @@ import {
 export const CheckInDetailsPage = () => {
   const { childId, checkInId } = useParams();
   const navigate = useNavigate();
+  const { t, formatDate } = useLanguage();
 
   const [child, setChild] = useState(null);
   const [checkIn, setCheckIn] = useState(null);
@@ -44,7 +46,7 @@ export const CheckInDetailsPage = () => {
       setCheckIn(data);
     } catch (err) {
       console.error('Failed to load check-in details:', err);
-      setError('Check-in record not found or access denied.');
+      setError(t('checkIns.notFoundError'));
     } finally {
       setIsLoading(false);
     }
@@ -61,14 +63,14 @@ export const CheckInDetailsPage = () => {
       navigate(`/children/${childId}/check-ins`, { replace: true });
     } catch (err) {
       console.error('Failed to delete check-in:', err);
-      setError('Failed to delete check-in.');
+      setError(t('checkIns.deleteError'));
       setIsDeleting(false);
       setShowDeleteModal(false);
     }
   };
 
   const handleDeleteEvent = async (eventId) => {
-    if (!window.confirm('Delete this behavior event observation?')) return;
+    if (!window.confirm(t('checkIns.confirmDeleteEvent'))) return;
     try {
       await checkInService.deleteEvent(childId, checkInId, eventId);
       fetchCheckInDetails();
@@ -82,7 +84,7 @@ export const CheckInDetailsPage = () => {
       <div className="min-h-[80vh] flex items-center justify-center bg-slate-50/50">
         <div className="flex flex-col items-center space-y-3">
           <div className="w-10 h-10 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-sm font-medium text-emerald-800">Loading check-in details...</p>
+          <p className="text-sm font-medium text-emerald-800">{t('checkIns.detailsLoading')}</p>
         </div>
       </div>
     );
@@ -92,21 +94,21 @@ export const CheckInDetailsPage = () => {
     return (
       <div className="min-h-[85vh] bg-slate-50/50 py-12 px-4 flex flex-col items-center justify-center text-center">
         <AlertCircle className="w-12 h-12 text-red-500 mb-3" />
-        <h2 className="text-xl font-bold text-slate-800">Check-In Not Found</h2>
-        <p className="text-sm text-slate-500 mt-1">{error || 'The requested check-in does not exist.'}</p>
+        <h2 className="text-xl font-bold text-slate-800">{t('checkIns.notFoundTitle')}</h2>
+        <p className="text-sm text-slate-500 mt-1">{error || t('checkIns.notFoundBody')}</p>
         <Link
           to={`/children/${childId}/check-ins`}
           className="mt-6 inline-flex items-center space-x-2 bg-emerald-600 text-white px-5 py-2.5 rounded-xl font-semibold text-sm hover:bg-emerald-700 transition"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Back to Check-Ins</span>
+          <span>{t('checkIns.backToCheckIns')}</span>
         </Link>
       </div>
     );
   }
 
-  const moodConfig = getMoodConfig(checkIn.overall_mood);
-  const formattedDate = new Date(checkIn.check_in_date).toLocaleDateString('en-US', {
+  const moodConfig = getMoodConfig(t, checkIn.overall_mood);
+  const formattedDate = formatDate(checkIn.check_in_date, {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
@@ -123,7 +125,7 @@ export const CheckInDetailsPage = () => {
             className="inline-flex items-center space-x-2 text-sm font-medium text-slate-500 hover:text-emerald-700 transition"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>Back to Check-Ins List</span>
+            <span>{t('checkIns.backToList')}</span>
           </Link>
 
           <div className="flex items-center space-x-3">
@@ -132,14 +134,14 @@ export const CheckInDetailsPage = () => {
               className="inline-flex items-center space-x-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl font-semibold text-sm transition"
             >
               <Edit className="w-4 h-4 text-slate-500" />
-              <span>Edit</span>
+              <span>{t('common.edit')}</span>
             </Link>
             <button
               onClick={() => setShowDeleteModal(true)}
               className="inline-flex items-center space-x-1.5 bg-red-50 hover:bg-red-100 text-red-600 px-4 py-2 rounded-xl font-semibold text-sm transition"
             >
               <Trash2 className="w-4 h-4" />
-              <span>Delete</span>
+              <span>{t('common.delete')}</span>
             </button>
           </div>
         </div>
@@ -150,7 +152,7 @@ export const CheckInDetailsPage = () => {
             <div>
               <div className="flex items-center space-x-2 text-slate-500 text-xs font-semibold uppercase tracking-wider mb-1">
                 <Calendar className="w-4 h-4 text-emerald-600" />
-                <span>Check-In Entry for {child?.first_name}</span>
+                <span>{t('checkIns.entryFor', { name: child?.first_name })}</span>
               </div>
               <h1 className="text-2xl font-bold text-slate-900">{formattedDate}</h1>
             </div>
@@ -159,21 +161,21 @@ export const CheckInDetailsPage = () => {
               {checkIn.overall_mood === 'good' && <Smile className="w-5 h-5 text-emerald-600" />}
               {checkIn.overall_mood === 'okay' && <Meh className="w-5 h-5 text-amber-600" />}
               {checkIn.overall_mood === 'difficult' && <Frown className="w-5 h-5 text-rose-600" />}
-              <span>Overall Day: {moodConfig.label}</span>
+              <span>{t('checkIns.overallDay', { mood: moodConfig.label })}</span>
             </div>
           </div>
 
           {/* General Notes */}
           <div>
             <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
-              General Parent Notes
+              {t('checkIns.generalNotesHeading')}
             </h2>
             {checkIn.general_notes ? (
               <p className="text-sm text-slate-700 bg-slate-50 p-4 rounded-xl border border-slate-100 whitespace-pre-line leading-relaxed">
                 {checkIn.general_notes}
               </p>
             ) : (
-              <p className="text-xs text-slate-400 italic">No general notes recorded for this date.</p>
+              <p className="text-xs text-slate-400 italic">{t('checkIns.noGeneralNotes')}</p>
             )}
           </div>
         </div>
@@ -184,19 +186,19 @@ export const CheckInDetailsPage = () => {
             <div className="flex items-center space-x-2">
               <Activity className="w-5 h-5 text-emerald-600" />
               <h2 className="text-lg font-bold text-slate-800">
-                Behavior Events ({checkIn.behavior_events?.length || 0})
+                {t('checkIns.behaviorEvents', { n: checkIn.behavior_events?.length || 0 })}
               </h2>
             </div>
           </div>
 
           {!checkIn.behavior_events || checkIn.behavior_events.length === 0 ? (
             <div className="text-center py-8 text-slate-400 text-sm">
-              <p>No specific behavior events recorded for this check-in.</p>
+              <p>{t('checkIns.noBehaviorEvents')}</p>
             </div>
           ) : (
             <div className="space-y-4">
               {checkIn.behavior_events.map((ev, idx) => {
-                const emotionConf = getEmotionConfig(ev.emotion);
+                const emotionConf = getEmotionConfig(t, ev.emotion);
                 return (
                   <div
                     key={ev.id}
@@ -204,19 +206,19 @@ export const CheckInDetailsPage = () => {
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex items-center space-x-3 flex-wrap gap-2">
-                        <span className="text-xs font-bold text-slate-400">Event #{idx + 1}</span>
+                        <span className="text-xs font-bold text-slate-400">{t('checkIns.eventNumber', { n: idx + 1 })}</span>
                         <span className={`text-xs font-bold px-3 py-1 rounded-full border ${emotionConf.color}`}>
-                          Emotion: {emotionConf.label}
+                          {t('checkIns.emotionValue', { emotion: emotionConf.label })}
                         </span>
                         <span className="text-xs font-semibold text-slate-600 bg-white border border-slate-200 px-2.5 py-0.5 rounded-full">
-                          Reaction Strength: {ev.intensity} / 5
+                          {t('checkIns.intensityValue', { n: ev.intensity })}
                         </span>
                       </div>
 
                       <button
                         onClick={() => handleDeleteEvent(ev.id)}
                         className="text-slate-400 hover:text-red-600 p-1 rounded transition"
-                        title="Delete Event"
+                        title={t('checkIns.deleteEventTitle')}
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -225,7 +227,7 @@ export const CheckInDetailsPage = () => {
                     {/* What Happened Description */}
                     <div>
                       <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
-                        What Happened
+                        {t('checkIns.whatHappened')}
                       </h4>
                       <p className="text-sm font-medium text-slate-800 whitespace-pre-line">
                         {ev.behavior_description}
@@ -235,22 +237,22 @@ export const CheckInDetailsPage = () => {
                     {/* Structured Meta Grid */}
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 border-t border-slate-200/60 text-xs">
                       <div>
-                        <span className="text-slate-400 font-semibold block">Trigger</span>
-                        <span className="font-semibold text-slate-700">{getTriggerLabel(ev.trigger)}</span>
+                        <span className="text-slate-400 font-semibold block">{t('checkIns.triggerHeading')}</span>
+                        <span className="font-semibold text-slate-700">{getTriggerLabel(t, ev.trigger)}</span>
                       </div>
                       <div>
-                        <span className="text-slate-400 font-semibold block">Parent Strategy Used</span>
-                        <span className="font-semibold text-slate-700">{getResponseLabel(ev.parent_response)}</span>
+                        <span className="text-slate-400 font-semibold block">{t('checkIns.strategyHeading')}</span>
+                        <span className="font-semibold text-slate-700">{getResponseLabel(t, ev.parent_response)}</span>
                       </div>
                       <div>
-                        <span className="text-slate-400 font-semibold block">Outcome</span>
-                        <span className="font-semibold text-slate-700">{getOutcomeLabel(ev.outcome)}</span>
+                        <span className="text-slate-400 font-semibold block">{t('checkIns.outcomeHeading')}</span>
+                        <span className="font-semibold text-slate-700">{getOutcomeLabel(t, ev.outcome)}</span>
                       </div>
                     </div>
 
                     {ev.event_notes && (
                       <div className="text-xs text-slate-500 bg-white p-3 rounded-lg border border-slate-100">
-                        <span className="font-semibold text-slate-600 block mb-0.5">Additional Notes:</span>
+                        <span className="font-semibold text-slate-600 block mb-0.5">{t('checkIns.additionalNotesValue')}</span>
                         {ev.event_notes}
                       </div>
                     )}
@@ -266,10 +268,9 @@ export const CheckInDetailsPage = () => {
       {showDeleteModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
           <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl border border-slate-100 space-y-4">
-            <h3 className="text-lg font-bold text-slate-900">Delete Daily Check-In</h3>
+            <h3 className="text-lg font-bold text-slate-900">{t('checkIns.deleteTitle')}</h3>
             <p className="text-sm text-slate-600">
-              Are you sure you want to delete this check-in record for <strong className="text-slate-800">{formattedDate}</strong>?
-              This will permanently delete all associated behavior event observations.
+              {t('checkIns.deleteBodyStart')} <strong className="text-slate-800">{formattedDate}</strong>{t('checkIns.deleteBodyEnd')}
             </p>
 
             <div className="flex items-center justify-end space-x-3 pt-4">
@@ -278,7 +279,7 @@ export const CheckInDetailsPage = () => {
                 disabled={isDeleting}
                 className="px-4 py-2.5 text-xs font-semibold text-slate-600 hover:text-slate-800 transition"
               >
-                Cancel
+                {t('common.cancel')}
               </button>
               <button
                 onClick={handleDeleteCheckIn}
@@ -288,10 +289,10 @@ export const CheckInDetailsPage = () => {
                 {isDeleting ? (
                   <>
                     <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    <span>Deleting...</span>
+                    <span>{t('common.deleting')}</span>
                   </>
                 ) : (
-                  <span>Confirm Delete</span>
+                  <span>{t('common.confirmDelete')}</span>
                 )}
               </button>
             </div>

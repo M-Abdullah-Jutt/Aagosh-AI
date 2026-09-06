@@ -1,8 +1,10 @@
 import React from 'react';
 import { ShieldAlert, Heart } from 'lucide-react';
-import { APP_NAME } from '../utils/constants';
+import { useLanguage } from '../i18n/LanguageContext';
 
 export const Footer = () => {
+  const { t } = useLanguage();
+
   return (
     <footer className="bg-stone-900 text-stone-300 mt-20 border-t border-stone-800">
       {/* Important Disclaimer Notice */}
@@ -10,7 +12,7 @@ export const Footer = () => {
         <div className="max-w-6xl mx-auto flex items-start sm:items-center space-x-2.5">
           <ShieldAlert className="w-4 h-4 text-amber-400 shrink-0 mt-0.5 sm:mt-0" />
           <p className="leading-relaxed">
-            <strong className="font-semibold text-amber-300">Important Disclaimer:</strong> {APP_NAME} provides parenting education and evidence-informed guidance. It is <strong>NOT a medical diagnosis system</strong> and is <strong>NOT a replacement</strong> for a licensed psychologist, psychiatrist, medical doctor, or qualified healthcare professional.
+            <strong className="font-semibold text-amber-300">{t('footer.disclaimerLabel')}</strong> {t('app.name')} {t('footer.disclaimerPart1')} <strong>{t('footer.disclaimerNotMedical')}</strong> {t('footer.disclaimerAnd')} <strong>{t('footer.disclaimerNotReplacement')}</strong> {t('footer.disclaimerPart2')}
           </p>
         </div>
       </div>
@@ -19,12 +21,12 @@ export const Footer = () => {
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-stone-400">
           <div className="flex items-center space-x-2">
             <Heart className="w-4 h-4 text-emerald-500 fill-emerald-500/20" />
-            <span className="font-medium text-stone-200">{APP_NAME}</span>
-            <span>— Personalized Parenting Companion</span>
+            <span className="font-medium text-stone-200">{t('app.name')}</span>
+            <span>{t('footer.productLine')}</span>
           </div>
 
           <p className="text-xs text-stone-500">
-            © {new Date().getFullYear()} Aaghosh. Crafted with care for modern families.
+            {t('footer.copyright', { year: new Date().getFullYear() })}
           </p>
         </div>
       </div>

@@ -11,3 +11,78 @@
 .calm-card {
   @apply bg-white border border-stone-200/80 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-200;
 }
+
+/* ───────────────────────────────────────────────────────────────────────────
+   Urdu / RTL
+   Noto Nastaliq Urdu is a cursive Nastaliq face with tall glyph stacks, so
+   Tailwind's bundled line-heights clip it and letter-spacing breaks the joins.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+[dir="rtl"] body {
+  font-family: 'Noto Nastaliq Urdu', 'Noto Naskh Arabic', 'Segoe UI', serif;
+}
+
+[dir="rtl"] .tracking-tight,
+[dir="rtl"] .tracking-wider,
+[dir="rtl"] .tracking-widest {
+  letter-spacing: normal;
+}
+
+/* Sub-12px Latin sizes are illegible in Nastaliq; lift them to a readable floor. */
+[dir="rtl"] .text-\[9px\],
+[dir="rtl"] .text-\[10px\],
+[dir="rtl"] .text-\[11px\],
+[dir="rtl"] .text-xs {
+  font-size: 12px;
+  line-height: 2.1;
+}
+
+[dir="rtl"] .text-sm { line-height: 2; }
+[dir="rtl"] .text-base { line-height: 1.9; }
+[dir="rtl"] .text-lg { line-height: 1.8; }
+[dir="rtl"] .text-xl { line-height: 1.7; }
+[dir="rtl"] .text-2xl { line-height: 1.6; }
+[dir="rtl"] .text-3xl { line-height: 1.6; }
+[dir="rtl"] .text-4xl { line-height: 1.5; }
+[dir="rtl"] .text-5xl { line-height: 1.5; }
+
+[dir="rtl"] .leading-none,
+[dir="rtl"] .leading-tight,
+[dir="rtl"] .leading-snug,
+[dir="rtl"] .leading-relaxed,
+[dir="rtl"] .leading-7 {
+  line-height: 2;
+}
+
+/* Tailwind's space-x utilities already honour --tw-space-x-reverse. */
+[dir="rtl"] [class*="space-x-"] > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 1;
+}
+
+/* Physical utilities have no RTL counterpart, so mirror them explicitly. */
+[dir="rtl"] .pl-2 { padding-left: 0; padding-right: 0.5rem; }
+[dir="rtl"] .pl-6 { padding-left: 0; padding-right: 1.5rem; }
+[dir="rtl"] .pl-11 { padding-left: 0; padding-right: 2.75rem; }
+[dir="rtl"] .pl-3\.5 { padding-left: 0; padding-right: 0.875rem; }
+[dir="rtl"] .pr-4 { padding-right: 0; padding-left: 1rem; }
+[dir="rtl"] .pr-11 { padding-right: 0; padding-left: 2.75rem; }
+[dir="rtl"] .pr-24 { padding-right: 0; padding-left: 6rem; }
+[dir="rtl"] .pr-0\.5 { padding-right: 0; padding-left: 0.125rem; }
+[dir="rtl"] .pr-3\.5 { padding-right: 0; padding-left: 0.875rem; }
+[dir="rtl"] .ml-1 { margin-left: 0; margin-right: 0.25rem; }
+[dir="rtl"] .ml-1\.5 { margin-left: 0; margin-right: 0.375rem; }
+[dir="rtl"] .ml-2 { margin-left: 0; margin-right: 0.5rem; }
+[dir="rtl"] .ml-3 { margin-left: 0; margin-right: 0.75rem; }
+[dir="rtl"] .mr-1 { margin-right: 0; margin-left: 0.25rem; }
+[dir="rtl"] .mr-1\.5 { margin-right: 0; margin-left: 0.375rem; }
+[dir="rtl"] .mr-2 { margin-right: 0; margin-left: 0.5rem; }
+[dir="rtl"] .left-0 { left: auto; right: 0; }
+[dir="rtl"] .right-0 { right: auto; left: 0; }
+[dir="rtl"] .right-4 { right: auto; left: 1rem; }
+[dir="rtl"] .text-left { text-align: right; }
+[dir="rtl"] .text-right { text-align: left; }
+[dir="rtl"] .border-l { border-left-width: 0; border-right-width: 1px; }
+[dir="rtl"] .border-r { border-right-width: 0; border-left-width: 1px; }
+[dir="rtl"] .rounded-tl-sm { border-top-left-radius: 0; border-top-right-radius: 0.125rem; }
+[dir="rtl"] .rounded-tr-sm { border-top-right-radius: 0; border-top-left-radius: 0.125rem; }
+[dir="rtl"] .translate-x-4 { --tw-translate-x: -1rem; }

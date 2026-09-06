@@ -3,9 +3,31 @@ from typing import List, Optional, Any, Dict
 from pydantic import BaseModel, Field, field_validator, ConfigDict
 
 
+# Language codes the AI coach can produce output in. Kept permissive on input:
+# an unrecognized value falls back to English rather than failing the request.
+SUPPORTED_RESPONSE_LANGUAGES = ("en", "ur")
+DEFAULT_RESPONSE_LANGUAGE = "en"
+
+
+def normalize_language_field(value: Optional[str]) -> str:
+    if not value:
+        return DEFAULT_RESPONSE_LANGUAGE
+    candidate = str(value).strip().lower()
+    if candidate in SUPPORTED_RESPONSE_LANGUAGES:
+        return candidate
+    prefix = candidate.split("-")[0].split("_")[0]
+    if prefix in SUPPORTED_RESPONSE_LANGUAGES:
+        return prefix
+    return DEFAULT_RESPONSE_LANGUAGE
+
+
 class CoachRequest(BaseModel):
     message: str = Field(..., min_length=1, max_length=1000, description="Parent's question or statement")
     period: str = Field("30d", description="Analytics window period (e.g. 7d, 14d, 30d, 90d, all)")
+    language: str = Field(
+        DEFAULT_RESPONSE_LANGUAGE,
+        description="Language the AI response must be written in ('en' or 'ur')"
+    )
 
     @field_validator("message")
     @classmethod
@@ -22,6 +44,11 @@ class CoachRequest(BaseModel):
         if v not in valid_periods:
             raise ValueError(f"Period must be one of {valid_periods}")
         return v
+
+    @field_validator("language")
+    @classmethod
+    def validate_language(cls, v: Optional[str]) -> str:
+        return normalize_language_field(v)
 
 
 class SourceReference(BaseModel):
@@ -67,6 +94,15 @@ class RawLLMOutput(BaseModel):
 
 class ConversationCreate(BaseModel):
     title: Optional[str] = Field(None, max_length=255, description="Optional title for the conversation")
+    language: str = Field(
+        DEFAULT_RESPONSE_LANGUAGE,
+        description="Language for the auto-generated welcome message ('en' or 'ur')"
+    )
+
+    @field_validator("language")
+    @classmethod
+    def validate_language(cls, v: Optional[str]) -> str:
+        return normalize_language_field(v)
 
 
 class ConversationResponse(BaseModel):
@@ -83,6 +119,10 @@ class ConversationResponse(BaseModel):
 class MessageCreate(BaseModel):
     message: str = Field(..., min_length=1, max_length=1000, description="Parent's question or statement")
     period: str = Field("30d", description="Analytics window period (7d, 14d, 30d, 90d, all)")
+    language: str = Field(
+        DEFAULT_RESPONSE_LANGUAGE,
+        description="Language the AI response must be written in ('en' or 'ur')"
+    )
 
     @field_validator("message")
     @classmethod
@@ -99,6 +139,11 @@ class MessageCreate(BaseModel):
         if v not in valid_periods:
             raise ValueError(f"Period must be one of {valid_periods}")
         return v
+
+    @field_validator("language")
+    @classmethod
+    def validate_language(cls, v: Optional[str]) -> str:
+        return normalize_language_field(v)
 
 
 class MessageItemResponse(BaseModel):

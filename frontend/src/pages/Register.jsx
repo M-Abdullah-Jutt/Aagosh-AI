@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../i18n/LanguageContext';
 import { User, Mail, Lock, Eye, EyeOff, ShieldCheck, AlertCircle } from 'lucide-react';
 
 export const Register = () => {
   const navigate = useNavigate();
   const { register, login } = useAuth();
+  const { t } = useLanguage();
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -28,19 +30,19 @@ export const Register = () => {
     e.preventDefault();
 
     if (!formData.fullName.trim()) {
-      setError('Please enter your full name.');
+      setError(t('auth.errFullName'));
       return;
     }
     if (!formData.email.trim()) {
-      setError('Please enter your email address.');
+      setError(t('auth.errEmail'));
       return;
     }
     if (formData.password.length < 8) {
-      setError('Password must be at least 8 characters long.');
+      setError(t('auth.errPasswordLength'));
       return;
     }
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match.');
+      setError(t('auth.errPasswordMismatch'));
       return;
     }
 
@@ -75,8 +77,8 @@ export const Register = () => {
           <div className="inline-flex items-center justify-center w-14 h-14 bg-emerald-100/70 text-emerald-700 rounded-2xl mb-4 shadow-sm">
             <ShieldCheck className="w-8 h-8" />
           </div>
-          <h1 className="text-2xl font-bold text-slate-800">Create Parent Account</h1>
-          <p className="text-sm text-slate-500 mt-1">Join Aaghosh for thoughtful parenting guidance</p>
+          <h1 className="text-2xl font-bold text-slate-800">{t('auth.registerTitle')}</h1>
+          <p className="text-sm text-slate-500 mt-1">{t('auth.registerSubtitle')}</p>
         </div>
 
         {/* Error Alert */}
@@ -91,7 +93,7 @@ export const Register = () => {
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
           <div>
             <label htmlFor="fullName" className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">
-              Full Name
+              {t('auth.fullName')}
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -104,7 +106,7 @@ export const Register = () => {
                 required
                 value={formData.fullName}
                 onChange={handleChange}
-                placeholder="Parent Name"
+                placeholder={t('auth.namePlaceholder')}
                 className="w-full pl-11 pr-4 py-3 bg-slate-50/50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
               />
             </div>
@@ -112,7 +114,7 @@ export const Register = () => {
 
           <div>
             <label htmlFor="email" className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">
-              Email Address
+              {t('auth.email')}
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -125,7 +127,7 @@ export const Register = () => {
                 required
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="parent@example.com"
+                placeholder={t('auth.emailPlaceholder')}
                 className="w-full pl-11 pr-4 py-3 bg-slate-50/50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
               />
             </div>
@@ -133,7 +135,7 @@ export const Register = () => {
 
           <div>
             <label htmlFor="password" className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">
-              Password (Min 8 characters)
+              {t('auth.passwordMin')}
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -162,7 +164,7 @@ export const Register = () => {
 
           <div>
             <label htmlFor="confirmPassword" className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">
-              Confirm Password
+              {t('auth.confirmPassword')}
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -189,19 +191,19 @@ export const Register = () => {
             {isSubmitting ? (
               <>
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                <span>Creating account...</span>
+                <span>{t('auth.creatingAccount')}</span>
               </>
             ) : (
-              <span>Create Account</span>
+              <span>{t('auth.createAccount')}</span>
             )}
           </button>
         </form>
 
         {/* Footer */}
         <div className="mt-8 text-center text-sm text-slate-600 border-t border-slate-100 pt-6">
-          Already have an account?{' '}
+          {t('auth.hasAccount')}{' '}
           <Link to="/login" className="font-semibold text-emerald-700 hover:text-emerald-800 transition">
-            Sign in
+            {t('auth.hasAccountLink')}
           </Link>
         </div>
       </div>

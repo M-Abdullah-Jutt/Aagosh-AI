@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 from typing import Optional, List, TYPE_CHECKING
-from sqlalchemy import String, Text, Boolean, DateTime, ForeignKey, JSON
+from sqlalchemy import String, Text, Boolean, DateTime, ForeignKey, JSON, Unicode, UnicodeText
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from app.db.base import Base
@@ -32,7 +32,7 @@ class CoachConversation(Base):
         nullable=False
     )
     title: Mapped[Optional[str]] = mapped_column(
-        String(255),
+        Unicode(255),
         nullable=True
     )
     is_active: Mapped[bool] = mapped_column(
@@ -82,7 +82,7 @@ class CoachMessage(Base):
         nullable=False
     )
     content: Mapped[str] = mapped_column(
-        Text,
+        UnicodeText,
         nullable=False
     )
     source_references: Mapped[Optional[dict]] = mapped_column(

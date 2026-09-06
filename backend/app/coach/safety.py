@@ -5,7 +5,9 @@ from app.schemas.coach_schemas import SourceReference
 
 logger = logging.getLogger(__name__)
 
-# Forbidden clinical labels & diagnostic terms
+# Forbidden clinical labels & diagnostic terms.
+# English entries use word boundaries; Urdu entries are plain substrings because
+# \b is unreliable against Urdu script runs.
 FORBIDDEN_DIAGNOSTIC_TERMS = [
     r"\bADHD\b",
     r"\bADD\b",
@@ -21,6 +23,19 @@ FORBIDDEN_DIAGNOSTIC_TERMS = [
     r"\bpersonality disorder\b",
     r"\bbipolar\b",
     r"\bdepression\b",
+    # Urdu-script equivalents
+    "آٹزم",
+    "ای ڈی ایچ ڈی",
+    "ڈپریشن",
+    "نفسیاتی عارضہ",
+    "نفسیاتی تشخیص",
+    "کلینیکل تشخیص",
+    "شخصیت کا عارضہ",
+    "بائی پولر",
+    "ذہنی عارضہ",
+    "دماغی بیماری",
+    "اضطرابی عارضہ",
+    "اپوزیشنل ڈیفائینٹ",
 ]
 
 # Unsupported causal claims patterns
@@ -31,6 +46,11 @@ FORBIDDEN_CAUSAL_PATTERNS = [
     r"suffers from emotional regulation",
     r"suffers from a disorder",
     r"due to an emotional disorder",
+    # Urdu-script equivalents
+    "رویے کی وجہ یہ عارضہ ہے",
+    "بچے کے رویے کی بنیادی وجہ بیماری",
+    "اس عارضے کی وجہ سے رویہ",
+    "ذہنی عارضے کا شکار ہے",
 ]
 
 # Dangerous or inappropriate parenting instructions
@@ -41,6 +61,14 @@ FORBIDDEN_HARMFUL_PATTERNS = [
     r"\block (them|the child|your child) in a room\b",
     r"\bwithhold food\b",
     r"\bcorporal punishment\b",
+    # Urdu-script equivalents
+    "تھپڑ مار",
+    "پٹائی کر",
+    "ڈنڈے سے مار",
+    "جسمانی سزا",
+    "کمرے میں بند کر",
+    "کھانا دینے سے محروم",
+    "مار پیٹ",
 ]
 
 

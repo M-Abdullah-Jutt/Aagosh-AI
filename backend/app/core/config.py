@@ -16,14 +16,12 @@ class Settings(BaseSettings):
         "http://localhost:3000",
     ]
 
-    # Microsoft SQL Server Database Settings
-    DB_SERVER: str = r"localhost\SQLEXPRESS"
-    DB_PORT: int = 1433
-    DB_NAME: str = "AaghoshDB"
-    DB_USER: str = "sa"
-    DB_PASSWORD: str = "YourStrongPassw0rd!"
-    DB_DRIVER: str = "ODBC Driver 17 for SQL Server"
-    DB_TRUSTED_CONNECTION: bool = True
+    # PostgreSQL / Supabase Database Settings
+    DB_SERVER: str = "aws-0-[REGION].pooler.supabase.com"
+    DB_PORT: int = 6543
+    DB_NAME: str = "postgres"
+    DB_USER: str = "postgres.[your-project-ref]"
+    DB_PASSWORD: str = "YourSupabasePassword"
     DB_ECHO: bool = False
 
     # JWT Authentication Settings
@@ -55,20 +53,12 @@ class Settings(BaseSettings):
     @property
     def SQLALCHEMY_DATABASE_URI(self) -> str:
         """
-        Build Microsoft SQL Server SQLAlchemy connection URI via pyodbc driver.
-        Supports both SQL user/password and Windows Authentication (Trusted Connection).
+        Build PostgreSQL SQLAlchemy connection URI via psycopg2 driver.
         """
-        encoded_driver = quote_plus(self.DB_DRIVER)
-        if self.DB_TRUSTED_CONNECTION:
-            return (
-                f"mssql+pyodbc://@{self.DB_SERVER}/{self.DB_NAME}?"
-                f"driver={encoded_driver}&trusted_connection=yes"
-            )
         encoded_password = quote_plus(self.DB_PASSWORD)
         return (
-            f"mssql+pyodbc://{self.DB_USER}:{encoded_password}@"
-            f"{self.DB_SERVER}:{self.DB_PORT}/{self.DB_NAME}?"
-            f"driver={encoded_driver}"
+            f"postgresql+psycopg2://{self.DB_USER}:{encoded_password}@"
+            f"{self.DB_SERVER}:{self.DB_PORT}/{self.DB_NAME}"
         )
 
 

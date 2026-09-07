@@ -58,11 +58,15 @@ export const EditChildPage = () => {
     e.preventDefault();
 
     if (!formData.first_name.trim()) {
-      setError('Please enter first name.');
+      setError('Please enter full name.');
       return;
     }
     if (!formData.date_of_birth) {
       setError('Please select date of birth.');
+      return;
+    }
+    if (!formData.gender) {
+      setError('Please select a gender.');
       return;
     }
 
@@ -140,7 +144,7 @@ export const EditChildPage = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="first_name" className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">
-                    First Name <span className="text-red-500">*</span>
+                    Full Name <span className="text-red-500">*</span>
                   </label>
                   <input
                     id="first_name"
@@ -171,11 +175,12 @@ export const EditChildPage = () => {
 
               <div>
                 <label htmlFor="gender" className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">
-                  Gender
+                  Gender <span className="text-red-500">*</span>
                 </label>
                 <select
                   id="gender"
                   name="gender"
+                  required
                   value={formData.gender}
                   onChange={handleChange}
                   className="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition"
@@ -195,20 +200,6 @@ export const EditChildPage = () => {
                 <Heart className="w-5 h-5 text-emerald-600" />
                 <span>Parent Observations</span>
               </h2>
-
-              <div>
-                <label htmlFor="strengths" className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">
-                  Strengths & Interests
-                </label>
-                <textarea
-                  id="strengths"
-                  name="strengths"
-                  rows={2}
-                  value={formData.strengths}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition text-sm"
-                />
-              </div>
 
               <div>
                 <label htmlFor="challenges" className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">

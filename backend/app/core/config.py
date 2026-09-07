@@ -2,6 +2,9 @@ from typing import List, Union
 from urllib.parse import quote_plus
 from pydantic import AnyHttpUrl, validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 class Settings(BaseSettings):
@@ -44,7 +47,7 @@ class Settings(BaseSettings):
     MAX_CONVERSATION_MESSAGES: int = 10
 
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=os.path.join(BASE_DIR, ".env"),
         env_file_encoding="utf-8",
         case_sensitive=True,
         extra="ignore"

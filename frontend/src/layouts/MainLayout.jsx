@@ -1,6 +1,7 @@
 import React from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import UserTour from '../components/UserTour';
 
 export const MainLayout = ({ children }) => {
   return (
@@ -10,6 +11,7 @@ export const MainLayout = ({ children }) => {
         {children}
       </main>
       <Footer />
+      <UserTour />
     </div>
   );
 };

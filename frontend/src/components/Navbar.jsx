@@ -9,8 +9,8 @@ export const Navbar = () => {
   const { user, isAuthenticated, logout } = useAuth();
   const { t } = useLanguage();
 
-  const navLinkClass = ({ isActive }) =>
-    `px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center space-x-1.5 ${
+  const navLinkClass = (extraClass = '') => ({ isActive }) =>
+    `px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center space-x-1.5 ${extraClass} ${
       isActive
         ? 'bg-emerald-50 text-emerald-700 font-semibold'
         : 'text-stone-600 hover:text-slate-900 hover:bg-stone-100/70'
@@ -37,24 +37,24 @@ export const Navbar = () => {
 
           {/* Navigation Links */}
           <nav className="flex items-center space-x-2 sm:space-x-3">
-            <NavLink to="/" className={navLinkClass}>
+            <NavLink to="/" className={navLinkClass()}>
               {t('nav.home')}
             </NavLink>
 
             {isAuthenticated && (
               <>
-                <NavLink to="/dashboard" className={navLinkClass}>
+                <NavLink to="/dashboard" className={navLinkClass('tour-dashboard')}>
                   <LayoutDashboard className="w-4 h-4 text-emerald-600" />
                   <span>{t('nav.dashboard')}</span>
                 </NavLink>
-                <NavLink to="/children" className={navLinkClass}>
+                <NavLink to="/children" className={navLinkClass('tour-children')}>
                   <User className="w-4 h-4 text-emerald-600" />
                   <span>{t('nav.children')}</span>
                 </NavLink>
               </>
             )}
 
-            <NavLink to="/health" className={navLinkClass}>
+            <NavLink to="/health" className={navLinkClass('tour-knowledge')}>
               <BookOpen className="w-4 h-4 text-emerald-600" />
               <span>{t('nav.knowledgeBase')}</span>
             </NavLink>

@@ -45,6 +45,10 @@ export const AddChildPage = () => {
       setError(t('childForm.errDateOfBirth'));
       return;
     }
+    if (!formData.gender) {
+      setError(t('childForm.errGender') || 'Please select a gender.');
+      return;
+    }
 
     const dob = new Date(formData.date_of_birth);
     if (dob > new Date()) {
@@ -175,11 +179,12 @@ export const AddChildPage = () => {
 
               <div>
                 <label htmlFor="gender" className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">
-                  {t('childForm.gender')} <span className="text-slate-400 font-normal lowercase">{t('common.optional')}</span>
+                  {t('childForm.gender')} <span className="text-red-500">{t('common.required')}</span>
                 </label>
                 <select
                   id="gender"
                   name="gender"
+                  required
                   value={formData.gender}
                   onChange={handleChange}
                   className="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition"
@@ -202,25 +207,7 @@ export const AddChildPage = () => {
                 </h2>
                 <span className="text-xs font-medium text-slate-400">{t('childForm.allFieldsOptional')}</span>
               </div>
-              <p className="text-xs text-slate-500 bg-emerald-50/50 p-3 rounded-lg border border-emerald-100/70">
-                {t('childForm.observationsNote')}
-              </p>
-
               <div className="space-y-4">
-                <div>
-                  <label htmlFor="strengths" className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">
-                    {t('childForm.strengths')}
-                  </label>
-                  <textarea
-                    id="strengths"
-                    name="strengths"
-                    rows={2}
-                    value={formData.strengths}
-                    onChange={handleChange}
-                    placeholder={t('childForm.strengthsPlaceholder')}
-                    className="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition text-sm"
-                  />
-                </div>
 
                 <div>
                   <label htmlFor="challenges" className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">

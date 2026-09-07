@@ -3,6 +3,7 @@ import logging
 from abc import ABC, abstractmethod
 from typing import Dict, Any, Optional
 from app.core.config import settings
+from groq import Groq
 
 logger = logging.getLogger(__name__)
 
@@ -376,12 +377,92 @@ class GeminiLLMProvider(LLMProvider):
             raise LLMProviderException(f"Unexpected Gemini Provider Error: {e}")
 
 
+class GroqLLMProvider(LLMProvider):
+    """
+    Groq LLM provider integration.
+    """
+
+    def __init__(self, api_key: str = None, model_name: str = None):
+        self.api_key = api_key or settings.LLM_API_KEY
+        self._model_name = model_name or "openai/gpt-oss-120b"
+
+        if not self.api_key:
+            logger.warning("GroqLLMProvider initialized without an API key.")
+
+    @property
+    def provider_name(self) -> str:
+        return "groq"
+
+    @property
+    def model_name(self) -> str:
+        return self._model_name
+
+    def generate_response(
+        self,
+        system_prompt: str,
+        user_prompt: str,
+        context: Dict[str, Any],
+        language: str = "en"
+    ) -> Dict[str, Any]:
+        if not self.api_key:
+            raise LLMAuthenticationException("Groq API key is missing. Set LLM_API_KEY environment variable.")
+
+        try:
+            
+            # Initialize client with explicitly provided API key
+            client = Groq(api_key=self.api_key)
+            
+            system_instruction_text = (
+                f"{system_prompt}\n\n"
+                f"IMPORTANT: You MUST respond with a valid JSON object only. "
+                f"The JSON must have exactly these keys: \"answer\", \"key_points\" (list of strings), "
+                f"\"suggested_steps\" (list of strings). The language of every string VALUE is controlled "
+                f"by the RESPONSE LANGUAGE section above and MUST be followed exactly."
+            )
+
+            # We set stream=False here because the existing architecture expects 
+            # a complete parsed dictionary in return, not an HTTP stream chunk.
+            completion = client.chat.completions.create(
+                model=self._model_name,
+                messages=[
+                    {"role": "system", "content": system_instruction_text},
+                    {"role": "user", "content": user_prompt}
+                ],
+                temperature=1,
+                max_completion_tokens=2048,
+                top_p=1,
+                reasoning_effort="medium",
+                stream=False,
+                response_format={"type": "json_object"},
+                stop=None
+            )
+
+            content_str = completion.choices[0].message.content
+            
+            # Strip markdown fences if present (defensive)
+            if content_str.strip().startswith("```"):
+                lines = content_str.strip().splitlines()
+                content_str = "\n".join(
+                    line for line in lines
+                    if not line.strip().startswith("```")
+                ).strip()
+                
+            parsed = json.loads(content_str)
+            logger.info(f"[GroqLLMProvider] Successfully parsed structured response from {self._model_name}")
+            return parsed
+
+        except Exception as e:
+            raise LLMProviderException(f"Unexpected Groq Provider Error: {e}")
+
+
 def get_llm_provider() -> LLMProvider:
     """
     Factory function returning the configured LLMProvider based on LLM_PROVIDER setting.
-    Supported values: 'gemini', 'openai', or anything else falls back to MockLLMProvider.
+    Supported values: 'gemini', 'openai', 'groq', or anything else falls back to MockLLMProvider.
     """
     provider_type = settings.LLM_PROVIDER.lower().strip()
+    if provider_type == "groq" and settings.LLM_API_KEY:
+        return GroqLLMProvider()
     if provider_type == "gemini" and settings.LLM_API_KEY:
         return GeminiLLMProvider()
     if provider_type == "openai" and settings.LLM_API_KEY:

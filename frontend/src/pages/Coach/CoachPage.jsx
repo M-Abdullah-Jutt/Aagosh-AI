@@ -210,14 +210,12 @@ export default function CoachPage() {
   const [loadingMsgs, setLoadingMsgs] = useState(false);
   const [error, setError] = useState(null);
 
-  const chatEndRef = useRef(null);
+  const chatContainerRef = useRef(null);
   const textareaRef = useRef(null);
   const abortControllerRef = useRef(null);
 
   const isThinking = sending || initializing;
   const lastMsg = messages[messages.length - 1];
-  const showQuickReplies = !isThinking && lastMsg?.role === 'assistant' && messages.length > 0;
-
   const starters = [
     { emoji: '😤', text: t('coach.starters.1') },
     { emoji: '🌙', text: t('coach.starters.2') },
@@ -225,15 +223,14 @@ export default function CoachPage() {
     { emoji: '📱', text: t('coach.starters.4') },
   ];
 
-  const quickReplies = [
-    t('coach.quickReplies.1'),
-    t('coach.quickReplies.2'),
-    t('coach.quickReplies.3'),
-    t('coach.quickReplies.4'),
-  ];
 
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTo({
+        top: chatContainerRef.current.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
   }, [messages, isThinking]);
 
   useEffect(() => {
@@ -474,7 +471,7 @@ export default function CoachPage() {
             </span>
           </div>
 
-          <div className="flex-1 overflow-y-auto px-4 py-5 bg-slate-50/40">
+          <div ref={chatContainerRef} className="flex-1 overflow-y-auto px-4 py-5 bg-slate-50/40">
 
             {!activeConvId && !loadingConvs && (
               <div className="h-full flex flex-col items-center justify-center text-center space-y-5 px-4">
@@ -525,23 +522,10 @@ export default function CoachPage() {
               </div>
             )}
 
-            <div ref={chatEndRef} className="h-1" />
+
           </div>
 
-          {showQuickReplies && (
-            <div className="shrink-0 px-4 py-2 border-t border-slate-100 bg-white flex items-center gap-2 overflow-x-auto">
-              <span className="text-[10px] text-slate-400 shrink-0 font-medium">{t('coach.quickLabel')}</span>
-              {quickReplies.map((qr, i) => (
-                <button
-                  key={i}
-                  onClick={() => handleSend(qr)}
-                  className="shrink-0 text-[11px] px-3 py-1 bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 border border-slate-200 hover:border-emerald-200 text-slate-600 rounded-full transition whitespace-nowrap"
-                >
-                  {qr}
-                </button>
-              ))}
-            </div>
-          )}
+
 
           <div className="shrink-0 p-3 border-t border-slate-100 bg-white">
             <div className={`flex items-end gap-2 bg-slate-50 border rounded-xl p-2 transition ${
@@ -565,10 +549,10 @@ export default function CoachPage() {
               {isThinking ? (
                 <button
                   onClick={handleStop}
-                  className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-lg transition shrink-0 shadow-sm flex items-center justify-center gap-1.5"
+                  title={t('common.stop') || 'Stop'}
+                  className="px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition shrink-0 shadow-sm flex items-center justify-center"
                 >
-                  <span className="w-2.5 h-2.5 bg-white rounded-sm inline-block" />
-                  <span>{t('common.stop') || 'Stop'}</span>
+                  <span className="w-3 h-3 bg-white rounded-sm inline-block" />
                 </button>
               ) : (
                 <button

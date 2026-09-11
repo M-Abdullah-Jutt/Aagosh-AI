@@ -67,8 +67,9 @@ COACH_STRINGS = {
         "new_conversation_title": "New Conversation",
         "greeting": "Hi! I'm Aaghosh AI, your personal parenting companion.",
         "welcome_support": (
-            "I'm here to support you with evidence-informed guidance tailored to {child_name}, "
-            "who is {age}."
+            "I have completely reviewed all the details you entered for {child_name} ({age}) "
+            "and I am fully ready for our next conversation! I'm here to support you with "
+            "evidence-informed guidance."
         ),
         "welcome_strengths": " I can see you've noted some strengths for {child_name}: {text}."
         ,
@@ -119,8 +120,8 @@ COACH_STRINGS = {
         "new_conversation_title": "نئی گفتگو",
         "greeting": "السلام علیکم! میں آغوش اے آئی ہوں، آپ کا ذاتی پیرنٹنگ ساتھی۔",
         "welcome_support": (
-            "میں آپ کو {child_name} کے لیے شواہد پر مبنی رہنمائی فراہم کرنے کے لیے موجود ہوں، "
-            "جن کی عمر {age} ہے۔"
+            "میں نے {child_name} ({age}) کی تمام تفصیلات جو آپ نے فراہم کی ہیں، اچھی طرح دیکھ لی ہیں "
+            "اور میں اب ہماری گفتگو کے لیے پوری طرح تیار ہوں! میں یہاں آپ کو شواہد پر مبنی رہنمائی فراہم کرنے کے لیے موجود ہوں۔"
         ),
         "welcome_strengths": " میں دیکھ سکتا ہوں کہ آپ نے {child_name} کی چند خوبیاں نوٹ کی ہیں: {text}۔",
         "welcome_challenges": " آپ نے کچھ ایسے پہلو بھی بیان کیے ہیں جن پر کام کی ضرورت ہے: {text}۔",

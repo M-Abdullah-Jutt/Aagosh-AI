@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, Link } from 'react-router-dom';
-import { Heart, User, LogOut, LayoutDashboard, LogIn, UserPlus, BookOpen } from 'lucide-react';
+import { Heart, User, LogOut, LayoutDashboard, LogIn, UserPlus, BookOpen, Home } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../i18n/LanguageContext';
 import LanguageSwitcher from './LanguageSwitcher';
@@ -38,25 +38,26 @@ export const Navbar = () => {
           {/* Navigation Links */}
           <nav className="flex items-center space-x-2 sm:space-x-3">
             <NavLink to="/" className={navLinkClass()}>
-              {t('nav.home')}
+              <Home className="w-4 h-4 text-emerald-600" />
+              <span className="hidden md:inline">{t('nav.home')}</span>
             </NavLink>
 
             {isAuthenticated && (
               <>
                 <NavLink to="/dashboard" className={navLinkClass('tour-dashboard')}>
                   <LayoutDashboard className="w-4 h-4 text-emerald-600" />
-                  <span>{t('nav.dashboard')}</span>
+                  <span className="hidden md:inline">{t('nav.dashboard')}</span>
                 </NavLink>
                 <NavLink to="/children" className={navLinkClass('tour-children')}>
                   <User className="w-4 h-4 text-emerald-600" />
-                  <span>{t('nav.children')}</span>
+                  <span className="hidden md:inline">{t('nav.children')}</span>
                 </NavLink>
               </>
             )}
 
             <NavLink to="/health" className={navLinkClass('tour-knowledge')}>
               <BookOpen className="w-4 h-4 text-emerald-600" />
-              <span>{t('nav.knowledgeBase')}</span>
+              <span className="hidden md:inline">{t('nav.knowledgeBase')}</span>
             </NavLink>
 
             {/* Language Selector */}
@@ -86,14 +87,14 @@ export const Navbar = () => {
                   className="px-3 py-1.5 text-sm font-medium text-slate-700 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg transition flex items-center space-x-1.5"
                 >
                   <LogIn className="w-4 h-4 text-slate-500" />
-                  <span>{t('nav.signIn')}</span>
+                  <span className="hidden md:inline">{t('nav.signIn')}</span>
                 </Link>
                 <Link
                   to="/register"
                   className="px-3.5 py-1.5 text-sm font-medium bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg shadow-sm hover:shadow transition flex items-center space-x-1.5"
                 >
                   <UserPlus className="w-4 h-4" />
-                  <span>{t('nav.register')}</span>
+                  <span className="hidden md:inline">{t('nav.register')}</span>
                 </Link>
               </div>
             )}

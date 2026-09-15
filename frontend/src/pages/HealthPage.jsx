@@ -27,6 +27,14 @@ const CDC_SOURCES = [
     tagColor: 'bg-violet-50 text-violet-700 border-violet-200',
     url: 'https://www.cdc.gov/ncbddd/actearly/index.html',
   },
+  {
+    id: 'unicef',
+    icon: BookOpen,
+    iconColor: 'text-amber-600',
+    iconBg: 'bg-amber-50 border-amber-100',
+    tagColor: 'bg-amber-50 text-amber-700 border-amber-200',
+    url: 'https://www.unicef.org/pakistan/early-childhood-development',
+  },
 ];
 
 const HOW_IT_WORKS = [

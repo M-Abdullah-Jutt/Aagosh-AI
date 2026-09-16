@@ -209,6 +209,7 @@ export default function CoachPage() {
   const [loadingConvs, setLoadingConvs] = useState(true);
   const [loadingMsgs, setLoadingMsgs] = useState(false);
   const [error, setError] = useState(null);
+  const [showSidebar, setShowSidebar] = useState(false);
 
   const chatContainerRef = useRef(null);
   const textareaRef = useRef(null);
@@ -357,9 +358,9 @@ export default function CoachPage() {
   const periods = localizeOptions(t, ANALYSIS_PERIODS);
 
   return (
-    <div className="py-6">
+    <div className="py-4 sm:py-6">
       {/* Page header */}
-      <div className="mb-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <div className="mb-4 sm:mb-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
           <Link
             to={`/children/${childId}`}
@@ -367,7 +368,7 @@ export default function CoachPage() {
           >
             {t('common.backToProfile', { name: child?.first_name || t('coach.childLabelFallback') })}
           </Link>
-          <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 flex flex-wrap items-center gap-2">
             {t('coach.title')}
             {child && (
               <span className="text-sm font-normal text-slate-500 bg-slate-100 border border-slate-200 px-2.5 py-0.5 rounded-full">
@@ -390,7 +391,7 @@ export default function CoachPage() {
           </select>
           <Link
             to={`/children/${childId}/check-ins/new`}
-            className="text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 hover:bg-emerald-100 px-3 py-1.5 rounded-lg transition"
+            className="text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 hover:bg-emerald-100 px-3 py-1.5 rounded-lg transition whitespace-nowrap"
           >
             {t('coach.addCheckIn')}
           </Link>
@@ -410,10 +411,79 @@ export default function CoachPage() {
         </div>
       )}
 
-      <div className="flex gap-5 h-[600px] bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+      {/* Mobile: Sessions toggle button */}
+      <div className="md:hidden mb-3">
+        <button
+          onClick={() => setShowSidebar(v => !v)}
+          aria-expanded={showSidebar}
+          className="w-full flex items-center justify-between px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 shadow-sm"
+        >
+          <span>{t('coach.recentSessions')}</span>
+          <svg
+            className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${showSidebar ? 'rotate-180' : ''}`}
+            fill="none" stroke="currentColor" viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
 
-        {/* Conversations sidebar */}
-        <aside className="w-56 shrink-0 border-r border-slate-100 flex flex-col bg-slate-50/60">
+        {/* Mobile sidebar dropdown */}
+        {showSidebar && (
+          <div className="mt-2 bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+            <div className="p-3 border-b border-slate-100 space-y-2">
+              {childrenList.length > 1 && (
+                <select
+                  value={childId}
+                  onChange={e => navigate(`/children/${e.target.value}/coach`)}
+                  aria-label={t('nav.children')}
+                  className="w-full bg-white border border-slate-200 rounded-lg px-2.5 py-2 text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                >
+                  {childrenList.map(c => (
+                    <option key={c.id} value={c.id}>
+                      {c.first_name}{shortAge(c) ? ` · ${shortAge(c)}` : ''}
+                    </option>
+                  ))}
+                </select>
+              )}
+              <button
+                onClick={() => { handleNewConversation(); setShowSidebar(false); }}
+                className="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition flex items-center justify-center gap-1.5 shadow-sm"
+              >
+                {t('coach.newChat')}
+              </button>
+            </div>
+
+            <div className="max-h-48 overflow-y-auto p-2 space-y-0.5">
+              {loadingConvs ? (
+                <p className="text-xs text-slate-400 text-center py-4">{t('coach.loadingSessions')}</p>
+              ) : conversations.length === 0 ? (
+                <p className="text-[11px] text-slate-400 text-center py-4 px-3 leading-relaxed italic">
+                  {t('coach.noSessions')}
+                </p>
+              ) : (
+                conversations.map(conv => (
+                  <ConvItem
+                    key={conv.id}
+                    conv={conv}
+                    active={conv.id === activeConvId}
+                    onClick={() => { setActiveConvId(conv.id); setShowSidebar(false); }}
+                    onArchive={handleArchive}
+                  />
+                ))
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Main chat container */}
+      <div
+        className="flex gap-5 bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden"
+        style={{ height: 'clamp(460px, calc(100vh - 16rem), 700px)' }}
+      >
+
+        {/* Conversations sidebar — desktop only */}
+        <aside className="hidden md:flex w-56 shrink-0 border-r border-slate-100 flex-col bg-slate-50/60">
           <div className="p-3 border-b border-slate-100 space-y-2.5">
             {childrenList.length > 1 && (
               <select
@@ -462,19 +532,19 @@ export default function CoachPage() {
         {/* Chat area */}
         <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
 
-          <div className="shrink-0 h-11 border-b border-slate-100 px-4 flex items-center bg-white">
-            <div className="w-2 h-2 rounded-full bg-emerald-500 mr-2 animate-pulse" />
-            <span className="text-xs font-semibold text-slate-600">
+          <div className="shrink-0 h-11 border-b border-slate-100 px-3 sm:px-4 flex items-center bg-white">
+            <div className="w-2 h-2 rounded-full bg-emerald-500 mr-2 animate-pulse shrink-0" />
+            <span className="text-xs font-semibold text-slate-600 truncate">
               {activeConvId
                 ? conversations.find(c => c.id === activeConvId)?.title || t('coach.chatFallback')
                 : t('coach.startConversation')}
             </span>
           </div>
 
-          <div ref={chatContainerRef} className="flex-1 overflow-y-auto px-4 py-5 bg-slate-50/40">
+          <div ref={chatContainerRef} className="flex-1 overflow-y-auto px-3 sm:px-4 py-4 sm:py-5 bg-slate-50/40">
 
             {!activeConvId && !loadingConvs && (
-              <div className="h-full flex flex-col items-center justify-center text-center space-y-5 px-4">
+              <div className="h-full flex flex-col items-center justify-center text-center space-y-4 sm:space-y-5 px-3">
                 <Avatar large />
                 <div>
                   <h3 className="font-bold text-slate-800 text-base">{t('coach.emptyTitle')}</h3>
@@ -527,7 +597,7 @@ export default function CoachPage() {
 
 
 
-          <div className="shrink-0 p-3 border-t border-slate-100 bg-white">
+          <div className="shrink-0 p-2 sm:p-3 border-t border-slate-100 bg-white">
             <div className={`flex items-end gap-2 bg-slate-50 border rounded-xl p-2 transition ${
               isThinking ? 'border-slate-200' : 'border-slate-300 focus-within:border-emerald-400 focus-within:ring-2 focus-within:ring-emerald-100'
             }`}>
@@ -558,7 +628,7 @@ export default function CoachPage() {
                 <button
                   onClick={() => handleSend()}
                   disabled={!input.trim()}
-                  className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-30 disabled:cursor-not-allowed text-white text-xs font-bold rounded-lg transition shrink-0 shadow-sm"
+                  className="px-3 sm:px-4 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-30 disabled:cursor-not-allowed text-white text-xs font-bold rounded-lg transition shrink-0 shadow-sm"
                 >
                   {t('coach.send')}
                 </button>

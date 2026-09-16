@@ -136,30 +136,32 @@ export default function AnalyticsPage() {
 
         {/* Page Title & Period Controls */}
         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mb-6">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className="text-2xl font-bold text-slate-900">
+              <h1 className="text-xl sm:text-2xl font-bold text-slate-900">
                 {t('analytics.title')}{child?.first_name ? ` — ${child.first_name}` : ''}
               </h1>
               <p className="text-sm text-slate-500 mt-1">{t('analytics.subtitle')}</p>
             </div>
 
-            {/* Time Window Selectors */}
-            <div className="inline-flex p-1 bg-slate-100 rounded-xl" role="group" aria-label={t('analytics.periodLabel')}>
-              {periods.map(item => (
-                <button
-                  key={item.id}
-                  onClick={() => setPeriod(item.id)}
-                  aria-pressed={period === item.id}
-                  className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition ${
-                    period === item.id
-                      ? 'bg-white text-indigo-600 shadow-sm'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  {item.label}
-                </button>
-              ))}
+            {/* Time Window Selectors — scrollable on mobile */}
+            <div className="overflow-x-auto pb-0.5 -mx-1 px-1">
+              <div className="inline-flex p-1 bg-slate-100 rounded-xl whitespace-nowrap" role="group" aria-label={t('analytics.periodLabel')}>
+                {periods.map(item => (
+                  <button
+                    key={item.id}
+                    onClick={() => setPeriod(item.id)}
+                    aria-pressed={period === item.id}
+                    className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition ${
+                      period === item.id
+                        ? 'bg-white text-indigo-600 shadow-sm'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>

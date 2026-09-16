@@ -19,22 +19,22 @@ export const Dashboard = () => {
     <div className="min-h-[85vh] bg-slate-50/50 py-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto space-y-8">
         {/* Welcome Header */}
-        <div className="bg-gradient-to-r from-emerald-700 via-teal-700 to-emerald-800 text-white rounded-3xl p-8 shadow-lg relative overflow-hidden">
+        <div className="bg-gradient-to-r from-emerald-700 via-teal-700 to-emerald-800 text-white rounded-3xl p-6 sm:p-8 shadow-lg relative overflow-hidden">
           <div className="absolute right-0 top-0 translate-x-4 -translate-y-4 w-48 h-48 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
-          <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4 sm:gap-6">
             <div>
               <div className="inline-flex items-center space-x-2 bg-emerald-600/50 backdrop-blur-md px-3 py-1 rounded-full text-xs font-medium text-emerald-100 mb-3 border border-emerald-400/30">
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>{t('dashboard.badge')}</span>
               </div>
-              <h1 className="text-3xl font-bold">{t('dashboard.welcome', { name: user?.full_name || t('dashboard.parentFallback') })}</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold">{t('dashboard.welcome', { name: user?.full_name || t('dashboard.parentFallback') })}</h1>
               <p className="text-emerald-100/90 text-sm mt-1 max-w-xl">
                 {t('dashboard.welcomeSubtitle')}
               </p>
             </div>
             <button
               onClick={logout}
-              className="inline-flex items-center justify-center space-x-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 px-5 py-2.5 rounded-xl font-medium text-sm backdrop-blur-sm transition shadow-sm"
+              className="inline-flex items-center justify-center space-x-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 px-5 py-2.5 rounded-xl font-medium text-sm backdrop-blur-sm transition shadow-sm self-start md:self-center"
             >
               <LogOut className="w-4 h-4" />
               <span>{t('dashboard.logOut')}</span>

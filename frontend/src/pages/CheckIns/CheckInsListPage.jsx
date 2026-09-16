@@ -148,31 +148,31 @@ export const CheckInsListPage = () => {
                     to={`/children/${childId}/check-ins/${ci.id}`}
                     className="p-4 bg-slate-50 hover:bg-slate-100/80 border border-slate-200/70 rounded-xl flex items-center justify-between transition group"
                   >
-                    <div className="space-y-1">
-                      <div className="flex items-center space-x-3">
-                        <span className="text-sm font-bold text-slate-900">
+                    <div className="space-y-1 min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="text-sm font-bold text-slate-900 shrink-0">
                           {formattedDate}
                         </span>
-                        <div className={`inline-flex items-center space-x-1.5 text-xs font-semibold px-2.5 py-0.5 rounded-full border ${moodConfig.color}`}>
+                        <div className={`inline-flex items-center space-x-1.5 text-xs font-semibold px-2.5 py-0.5 rounded-full border shrink-0 ${moodConfig.color}`}>
                           {renderMoodIcon(ci.overall_mood)}
                           <span>{moodConfig.label}</span>
                         </div>
                       </div>
 
-                      <div className="flex items-center space-x-3 text-xs text-slate-500">
-                        <span>
+                      <div className="flex items-center gap-2 text-xs text-slate-500 min-w-0">
+                        <span className="shrink-0">
                           {ci.events_count || 0} {t('checkIns.behaviorEventsCount', { count: ci.events_count || 0 })}
                         </span>
                         {ci.general_notes && (
-                          <span className="truncate max-w-md italic text-slate-600">
+                          <span className="truncate max-w-[120px] sm:max-w-xs italic text-slate-600">
                             • "{ci.general_notes}"
                           </span>
                         )}
                       </div>
                     </div>
 
-                    <div className="flex items-center space-x-1 text-xs font-semibold text-emerald-700 group-hover:translate-x-1 transition-transform">
-                      <span>{t('common.details')}</span>
+                    <div className="flex items-center space-x-1 text-xs font-semibold text-emerald-700 group-hover:translate-x-1 transition-transform shrink-0 ml-2">
+                      <span className="hidden sm:inline">{t('common.details')}</span>
                       <ChevronRight className="w-4 h-4" />
                     </div>
                   </Link>

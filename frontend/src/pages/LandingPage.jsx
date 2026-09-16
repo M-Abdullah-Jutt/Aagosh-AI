@@ -19,21 +19,21 @@ export const LandingPage = () => {
   };
 
   return (
-    <div className="space-y-16 py-4">
+    <div className="space-y-12 sm:space-y-16 py-4">
       {/* Hero Section */}
-      <section className="text-center max-w-3xl mx-auto space-y-6 pt-6">
-        <div className="flex justify-center mb-6">
-          <img src="/logo.jpeg" alt="Aaghosh Logo" className="h-56 sm:h-64 w-auto object-contain rounded-3xl shadow-sm" />
+      <section className="text-center max-w-3xl mx-auto space-y-5 sm:space-y-6 pt-4 sm:pt-6">
+        <div className="flex justify-center mb-4 sm:mb-6">
+          <img src="/logo.jpeg" alt="Aaghosh Logo" className="h-40 sm:h-56 lg:h-64 w-auto object-contain rounded-3xl shadow-sm" />
         </div>
-        <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-slate-900 leading-tight">
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900 leading-tight">
           {t('landing.heroTitle')}
         </h1>
 
-        <p className="text-lg text-slate-600 leading-relaxed font-normal">
+        <p className="text-base sm:text-lg text-slate-600 leading-relaxed font-normal px-2">
           {t('landing.heroBody', { tagline: t('app.tagline') })}
         </p>
 
-        <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
           <NavLink
             to="/health"
             className="w-full sm:w-auto px-6 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-medium shadow-sm transition-all flex items-center justify-center space-x-2"

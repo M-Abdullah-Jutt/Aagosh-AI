@@ -92,10 +92,10 @@ export const ChildDetailsPage = () => {
   const inactiveGoals = child.goals?.filter((g) => !g.is_active) || [];
 
   return (
-    <div className="min-h-[85vh] bg-slate-50/50 py-10 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto space-y-8">
+    <div className="min-h-[85vh] bg-slate-50/50 py-8 sm:py-10 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto space-y-6 sm:space-y-8">
         {/* Navigation & Actions Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <Link
             to="/children"
             className="inline-flex items-center space-x-2 text-sm font-medium text-slate-500 hover:text-emerald-700 transition"
@@ -104,17 +104,17 @@ export const ChildDetailsPage = () => {
             <span>Back to Children</span>
           </Link>
 
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2 sm:space-x-3">
             <Link
               to={`/children/${child.id}/edit`}
-              className="inline-flex items-center space-x-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl font-semibold text-sm transition"
+              className="inline-flex items-center space-x-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 sm:px-4 py-2 rounded-xl font-semibold text-sm transition"
             >
               <Edit className="w-4 h-4 text-slate-500" />
-              <span>Edit Profile</span>
+              <span>Edit</span>
             </Link>
             <button
               onClick={() => setShowDeleteModal(true)}
-              className="inline-flex items-center space-x-1.5 bg-red-50 hover:bg-red-100 text-red-600 px-4 py-2 rounded-xl font-semibold text-sm transition"
+              className="inline-flex items-center space-x-1.5 bg-red-50 hover:bg-red-100 text-red-600 px-3 sm:px-4 py-2 rounded-xl font-semibold text-sm transition"
             >
               <Trash2 className="w-4 h-4" />
               <span>Delete</span>
@@ -153,33 +153,33 @@ export const ChildDetailsPage = () => {
             </div>
           </div>
 
-          <div className="mt-6 pt-6 border-t border-slate-100 flex flex-wrap items-center justify-between gap-4">
+          <div className="mt-6 pt-6 border-t border-slate-100 flex flex-col sm:flex-row sm:flex-wrap sm:items-center sm:justify-between gap-3">
             <div className="text-xs text-slate-500">
               Track daily mood and specific behavior situations for {child.first_name}.
             </div>
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
               <Link
                 to={`/children/${child.id}/coach`}
-                className="inline-flex items-center space-x-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white px-4 py-2.5 rounded-xl font-semibold text-xs shadow-sm hover:shadow-md transition"
+                className="inline-flex items-center space-x-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl font-semibold text-xs shadow-sm hover:shadow-md transition"
               >
                 <MessageCircle className="w-4 h-4" />
                 <span>Ask AI Coach</span>
               </Link>
               <Link
                 to={`/children/${child.id}/analytics`}
-                className="inline-flex items-center space-x-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl font-semibold text-xs shadow-sm hover:shadow transition"
+                className="inline-flex items-center space-x-2 bg-indigo-600 hover:bg-indigo-700 text-white px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl font-semibold text-xs shadow-sm hover:shadow transition"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
-                <span>Behavior Insights</span>
+                <span>Insights</span>
               </Link>
               <Link
                 to={`/children/${child.id}/check-ins`}
-                className="inline-flex items-center space-x-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2.5 rounded-xl font-semibold text-xs shadow-sm hover:shadow transition"
+                className="inline-flex items-center space-x-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl font-semibold text-xs shadow-sm hover:shadow transition"
               >
                 <Calendar className="w-4 h-4" />
-                <span>Daily Check-Ins</span>
+                <span>Check-Ins</span>
               </Link>
             </div>
           </div>

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Joyride, STATUS } from 'react-joyride';
+import { Joyride, STATUS, ACTIONS } from 'react-joyride';
 import { useAuth } from '../context/AuthContext';
-import { useLocation } from 'react-router-dom';
 import { X, Sparkles } from 'lucide-react';
 
 const CustomTooltip = ({
@@ -75,17 +74,18 @@ const CustomTooltip = ({
 
 const UserTour = () => {
   const { isAuthenticated } = useAuth();
-  const location = useLocation();
   const [run, setRun] = useState(false);
 
   useEffect(() => {
-    // Only run if authenticated, on the dashboard, and haven't seen the tour yet
+    // Only run once for new/fresh users who haven't seen the tour yet.
+    // Removing 'location' from deps prevents the tour from re-triggering
+    // on every page navigation.
     if (isAuthenticated && localStorage.getItem('hasSeenTour') !== 'true') {
       // Small delay to ensure DOM is fully rendered before trying to attach tooltips
       const timer = setTimeout(() => setRun(true), 800);
       return () => clearTimeout(timer);
     }
-  }, [isAuthenticated, location]);
+  }, [isAuthenticated]); // ← intentionally no 'location' dep
 
   const steps = [
     {
@@ -113,9 +113,14 @@ const UserTour = () => {
   ];
 
   const handleJoyrideCallback = (data) => {
-    const { status } = data;
-    const finishedStatuses = [STATUS.FINISHED, STATUS.SKIPPED];
-    if (finishedStatuses.includes(status)) {
+    const { status, action } = data;
+    // Mark tour as seen when finished, skipped, or closed via the X button.
+    // This ensures returning users never see the tour again, regardless of
+    // how they dismissed it.
+    const isDone =
+      [STATUS.FINISHED, STATUS.SKIPPED].includes(status) ||
+      action === ACTIONS.CLOSE;
+    if (isDone) {
       setRun(false);
       localStorage.setItem('hasSeenTour', 'true');
     }

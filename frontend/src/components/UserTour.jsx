@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import * as ReactJoyride from 'react-joyride';
-const Joyride = ReactJoyride.default ?? ReactJoyride;
-const { STATUS, ACTIONS } = ReactJoyride;
+import { Joyride, STATUS, ACTIONS } from 'react-joyride';
 import { useAuth } from '../context/AuthContext';
 import { X, Sparkles } from 'lucide-react';
 

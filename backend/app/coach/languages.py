@@ -65,28 +65,26 @@ COACH_STRINGS = {
         ),
         "welcome_disclaimer": "Aaghosh AI is not a medical or clinical tool.",
         "new_conversation_title": "New Conversation",
-        "greeting": "Hi! I'm Aaghosh AI, your personal parenting companion.",
+        "greeting": "Hi there! 👋 I'm Aaghosh AI — your personal, evidence-informed parenting companion.",
         "welcome_support": (
-            "I have completely reviewed all the details you entered for {child_name} ({age}) "
-            "and I am fully ready for our next conversation! I'm here to support you with "
-            "evidence-informed guidance."
+            "I've carefully reviewed everything you've shared about {child_name} ({age}), "
+            "and I'm ready to support you every step of the way. Whether you're navigating "
+            "big emotions, tricky bedtime routines, screen-time battles, sibling conflicts, or "
+            "just need a thoughtful parenting perspective — I'm here to help, grounded in "
+            "real, approved parenting guidance."
         ),
-        "welcome_strengths": " I can see you've noted some strengths for {child_name}: {text}."
-        ,
-        "welcome_challenges": " You've also mentioned some growth areas: {text}."
-        ,
-        "welcome_goals": " Your active parenting focus areas include: {goals}."
-        ,
+        "welcome_strengths": " I noticed you've highlighted some of {child_name}'s strengths: {text} — that's wonderful context!",
+        "welcome_challenges": " You've also shared some areas you'd like to work on together: {text}.",
+        "welcome_goals": " Your current parenting focus areas are: **{goals}**.",
         "welcome_ask": (
-            "To give you the most helpful guidance, I'd love to understand {child_name}'s daily "
-            "patterns better. Could you tell me about any emotional triggers or challenging "
-            "situations you've been observing lately? For example: transitions (ending screen "
-            "time, bedtime), mealtimes, sibling interactions, or moments when strong emotions "
-            "tend to arise."
+            "To give you the most personalised guidance, I'd love to hear what's been on your mind lately. "
+            "What's a situation with {child_name} that you'd most like support with right now? "
+            "It could be something that happened today, a recurring pattern, or simply a question "
+            "you've been wondering about."
         ),
         "welcome_invite": (
-            "You can also ask me anything directly — about behavior, routines, communication, or "
-            "anything on your mind as a parent. I'm here to help!"
+            "Feel free to type anything — a question, a quick update, or even just how your day went. "
+            "I'm here, and I'm listening. 💚"
         ),
         "age_years": "{years} years old",
         "age_unknown": "at their age",
@@ -118,25 +116,24 @@ COACH_STRINGS = {
         ),
         "welcome_disclaimer": "آغوش اے آئی کوئی طبی یا کلینیکل ٹول نہیں ہے۔",
         "new_conversation_title": "نئی گفتگو",
-        "greeting": "السلام علیکم! میں آغوش اے آئی ہوں، آپ کا ذاتی پیرنٹنگ ساتھی۔",
+        "greeting": "السلام علیکم! 👋 میں آغوش اے آئی ہوں — آپ کا ذاتی، شواہد پر مبنی پیرنٹنگ ساتھی۔",
         "welcome_support": (
-            "میں نے {child_name} ({age}) کی تمام تفصیلات جو آپ نے فراہم کی ہیں، اچھی طرح دیکھ لی ہیں "
-            "اور میں اب ہماری گفتگو کے لیے پوری طرح تیار ہوں! میں یہاں آپ کو شواہد پر مبنی رہنمائی فراہم کرنے کے لیے موجود ہوں۔"
+            "میں نے {child_name} ({age}) کے بارے میں آپ کی فراہم کردہ تمام معلومات کا بغور جائزہ لیا ہے "
+            "اور میں ہر قدم پر آپ کی مدد کے لیے پوری طرح تیار ہوں۔ چاہے آپ بڑے جذبات، سونے کے مشکل معمولات، "
+            "اسکرین ٹائم کے مسائل، بہن بھائیوں کے درمیان جھگڑوں سے نمٹ رہے ہوں، یا بس ایک سوچے سمجھے "
+            "پیرنٹنگ نقطہ نظر کی ضرورت ہو — میں منظور شدہ پیرنٹنگ رہنمائی کی بنیاد پر آپ کی مدد کے لیے حاضر ہوں۔"
         ),
-        "welcome_strengths": " میں دیکھ سکتا ہوں کہ آپ نے {child_name} کی چند خوبیاں نوٹ کی ہیں: {text}۔",
-        "welcome_challenges": " آپ نے کچھ ایسے پہلو بھی بیان کیے ہیں جن پر کام کی ضرورت ہے: {text}۔",
-        "welcome_goals": " آپ کے فعال پیرنٹنگ مقاصد میں یہ شامل ہیں: {goals}۔",
+        "welcome_strengths": " میں نے دیکھا کہ آپ نے {child_name} کی چند خوبیاں اجاگر کی ہیں: {text} — یہ بہت اچھا تناظر ہے!",
+        "welcome_challenges": " آپ نے کچھ ایسے پہلو بھی بیان کیے ہیں جن پر مل کر کام کرنا ہے: {text}۔",
+        "welcome_goals": " آپ کے موجودہ پیرنٹنگ توجہ کے شعبے یہ ہیں: **{goals}**۔",
         "welcome_ask": (
-            "بہترین رہنمائی دینے کے لیے میں {child_name} کے روزمرہ معمولات کو بہتر طور پر سمجھنا "
-            "چاہوں گا۔ کیا آپ مجھے حال ہی میں نظر آنے والے کسی جذباتی محرک یا مشکل صورتحال کے "
-            "بارے میں بتا سکتے ہیں؟ مثال کے طور پر: ایک کام سے دوسرے کام کی منتقلی (اسکرین ٹائم "
-            "ختم کرنا، سونے کا وقت)، کھانے کے اوقات، بہن بھائیوں کے ساتھ تعلقات، یا وہ لمحات جب "
-            "بچے میں شدید جذبات ابھرتے ہیں۔"
+            "آپ کو سب سے بہتر، ذاتی رہنمائی دینے کے لیے میں جاننا چاہوں گا کہ آج کل آپ کے ذہن میں کیا چل رہا ہے۔ "
+            "ایسی کونسی صورتحال ہے {child_name} کے ساتھ جس میں آپ ابھی سب سے زیادہ مدد چاہتے ہیں؟ "
+            "یہ آج کا کوئی واقعہ ہو سکتا ہے، کوئی بار بار آنے والا معاملہ، یا بس کوئی سوال جو آپ کے ذہن میں ہو۔"
         ),
         "welcome_invite": (
-            "آپ مجھ سے براہِ راست بھی کچھ پوچھ سکتے ہیں — رویے، روزمرہ معمولات، بات چیت کے انداز، "
-            "یا والدین کے طور پر آپ کے ذہن میں موجود کسی بھی بات کے بارے میں۔ میں آپ کی مدد کے "
-            "لیے حاضر ہوں!"
+            "بے جھجھک کچھ بھی لکھیں — کوئی سوال، ایک مختصر اپ ڈیٹ، یا یہاں تک کہ بس آپ کا دن کیسا گزرا۔ "
+            "میں یہاں ہوں، اور میں توجہ سے سن رہا ہوں۔ 💚"
         ),
         "age_years": "{years} سال",
         "age_unknown": "اپنی عمر کے مطابق",

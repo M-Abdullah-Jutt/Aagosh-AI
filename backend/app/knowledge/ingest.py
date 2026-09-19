@@ -5,7 +5,7 @@ from typing import Optional
 
 from app.knowledge.parser import PDFKnowledgeParser
 from app.knowledge.embeddings import get_embedding_provider
-from app.knowledge.vector_store import FileVectorStore
+from app.knowledge.vector_store import get_vector_store
 from app.knowledge.schemas import IngestionSummary
 
 
@@ -50,8 +50,8 @@ def run_ingestion(pdf_path: Optional[str] = None) -> IngestionSummary:
         texts = [c.content for c in chunks]
         embeddings = provider.embed_documents(texts)
 
-        # 3. Store vectors idempotently
-        vector_store = FileVectorStore()
+        # 3. Store vectors idempotently (ChromaDB or FileVectorStore)
+        vector_store = get_vector_store()
         store_res = vector_store.add_documents(chunks, embeddings)
 
         summary = IngestionSummary(

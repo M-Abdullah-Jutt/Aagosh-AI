@@ -1,6 +1,6 @@
 from typing import List, Optional, Dict, Any
 from app.knowledge.embeddings import get_embedding_provider
-from app.knowledge.vector_store import FileVectorStore
+from app.knowledge.vector_store import get_vector_store
 from app.knowledge.schemas import SearchResult
 
 
@@ -22,7 +22,7 @@ class KnowledgeRetrievalService:
         provider = get_embedding_provider()
         query_embedding = provider.embed_text(query)
 
-        vector_store = FileVectorStore()
+        vector_store = get_vector_store()
         results = vector_store.search(
             query_embedding=query_embedding,
             query_text=query,

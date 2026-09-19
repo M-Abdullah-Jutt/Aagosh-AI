@@ -1,7 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { Joyride, STATUS, ACTIONS } from 'react-joyride';
+import Joyride, { STATUS, ACTIONS } from 'react-joyride';
 import { useAuth } from '../context/AuthContext';
 import { X, Sparkles } from 'lucide-react';
+
+// ─── Helpers ────────────────────────────────────────────────────────────────
+
+/**
+ * Returns a per-user localStorage key so that the tour is tracked
+ * independently for every account on this browser.
+ * A generic key ('hasSeenTour') would wrongly hide the tour for a new user
+ * who happens to share the browser with someone who already dismissed it.
+ */
+const getTourKey = (userId) => `aaghosh_tour_seen_${userId}`;
+
+const hasSeenTour = (userId) => {
+  if (!userId) return true; // safety: don't show if no user
+  try {
+    return localStorage.getItem(getTourKey(userId)) === 'true';
+  } catch {
+    return true;
+  }
+};
+
+const markTourSeen = (userId) => {
+  if (!userId) return;
+  try {
+    localStorage.setItem(getTourKey(userId), 'true');
+  } catch { /* ignore */ }
+};
+
+// ─── Custom Tooltip ──────────────────────────────────────────────────────────
 
 const CustomTooltip = ({
   index,
@@ -47,7 +75,7 @@ const CustomTooltip = ({
             Skip
           </button>
         ) : (
-          <span /> // placeholder
+          <span /> // placeholder for flex layout
         )}
 
         <div className="flex items-center gap-2">
@@ -63,7 +91,7 @@ const CustomTooltip = ({
             {...primaryProps}
             className="px-5 py-2 text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl transition-colors shadow-sm"
           >
-            {isLastStep ? 'Finish Tour' : 'Next'}
+            {isLastStep ? "Got it, let's start! 🚀" : 'Next'}
           </button>
         </div>
       </div>
@@ -71,62 +99,67 @@ const CustomTooltip = ({
   );
 };
 
+// ─── Tour Steps ───────────────────────────────────────────────────────────────
+
+const TOUR_STEPS = [
+  {
+    target: 'body',
+    content:
+      "Welcome to Aaghosh AI! You're in the right place. Let's take 30 seconds to show you around your new parenting companion.",
+    placement: 'center',
+    disableBeacon: true,
+    title: '👋 Welcome!',
+  },
+  {
+    target: '.tour-dashboard',
+    content:
+      'Your Dashboard gives you a high-level overview — active goals, recent activity, and a quick view of your family profiles.',
+    title: '🏠 Dashboard',
+  },
+  {
+    target: '.tour-children',
+    content:
+      "Add your children's profiles here. The more context you add (age, goals, observations), the more personalised the AI Coach's guidance becomes.",
+    title: '👶 Children & Profiles',
+  },
+  {
+    target: '.tour-knowledge',
+    content:
+      'Our AI Coach draws from a curated, evidence-based parenting knowledge base. You can explore and search it here — full transparency, always.',
+    title: '📚 Knowledge Base',
+  },
+];
+
+// ─── Main Component ───────────────────────────────────────────────────────────
 
 const UserTour = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const [run, setRun] = useState(false);
 
   useEffect(() => {
-    // Only run once for new/fresh users who haven't seen the tour yet.
-    // Removing 'location' from deps prevents the tour from re-triggering
-    // on every page navigation.
-    if (isAuthenticated && localStorage.getItem('hasSeenTour') !== 'true') {
-      // Small delay to ensure DOM is fully rendered before trying to attach tooltips
+    // Show the tour only when:
+    //  1. The user is authenticated
+    //  2. We have a user ID to scope the key
+    //  3. This specific user has never seen the tour before
+    if (isAuthenticated && user?.id && !hasSeenTour(user.id)) {
+      // Small delay so the DOM is fully rendered before Joyride tries to attach tooltips
       const timer = setTimeout(() => setRun(true), 800);
       return () => clearTimeout(timer);
     }
-  }, [isAuthenticated]); // ← intentionally no 'location' dep
-
-  const steps = [
-    {
-      target: 'body',
-      content: 'Welcome to Aaghosh AI! Let us give you a quick tour of your new parenting companion.',
-      placement: 'center',
-      disableBeacon: true,
-      title: 'Welcome!'
-    },
-    {
-      target: '.tour-dashboard',
-      content: 'This is your Dashboard. Here you get a high-level overview of your family, active goals, and recent activity.',
-      title: 'Dashboard'
-    },
-    {
-      target: '.tour-children',
-      content: 'Manage your children\'s profiles here. You can add new children, track their daily check-ins, set goals, and access the AI Coach.',
-      title: 'Children & Coaching'
-    },
-    {
-      target: '.tour-knowledge',
-      content: 'Explore the Knowledge Base to see the evidence-based parenting guidance our AI Coach relies on. We believe in complete transparency!',
-      title: 'Knowledge Base'
-    }
-  ];
+  }, [isAuthenticated, user?.id]);
 
   const handleJoyrideCallback = (data) => {
     const { status, action } = data;
-    // Mark tour as seen when finished, skipped, or closed via the X button.
-    // This ensures returning users never see the tour again, regardless of
-    // how they dismissed it.
+    // Mark tour as seen when finished, skipped, or dismissed via the ✕ button.
     const isDone =
       [STATUS.FINISHED, STATUS.SKIPPED].includes(status) ||
       action === ACTIONS.CLOSE;
     if (isDone) {
       setRun(false);
-      localStorage.setItem('hasSeenTour', 'true');
+      markTourSeen(user?.id);
     }
   };
 
-  // Only render Joyride if user is authenticated
   if (!isAuthenticated) return null;
 
   return (
@@ -139,11 +172,11 @@ const UserTour = () => {
       scrollToFirstStep
       showProgress
       showSkipButton
-      steps={steps}
+      steps={TOUR_STEPS}
       styles={{
         options: {
           zIndex: 100000,
-          arrowColor: '#ecfdf5', // emerald-50 to match the gradient start
+          arrowColor: '#ecfdf5', // emerald-50 — matches the tooltip gradient start
         },
       }}
     />

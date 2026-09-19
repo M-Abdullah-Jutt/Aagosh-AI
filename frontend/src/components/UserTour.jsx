@@ -133,20 +133,21 @@ const TOUR_STEPS = [
 // ─── Main Component ───────────────────────────────────────────────────────────
 
 const UserTour = () => {
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, isLoading, user } = useAuth();
   const [run, setRun] = useState(false);
 
   useEffect(() => {
     // Show the tour only when:
-    //  1. The user is authenticated
-    //  2. We have a user ID to scope the key
-    //  3. This specific user has never seen the tour before
-    if (isAuthenticated && user?.id && !hasSeenTour(user.id)) {
+    //  1. Auth state has fully resolved (not still validating session)
+    //  2. The user is authenticated
+    //  3. We have a user ID to scope the key
+    //  4. This specific user has never seen the tour before
+    if (!isLoading && isAuthenticated && user?.id && !hasSeenTour(user.id)) {
       // Small delay so the DOM is fully rendered before Joyride tries to attach tooltips
       const timer = setTimeout(() => setRun(true), 800);
       return () => clearTimeout(timer);
     }
-  }, [isAuthenticated, user?.id]);
+  }, [isLoading, isAuthenticated, user?.id]);
 
   const handleJoyrideCallback = (data) => {
     const { status, action } = data;
@@ -160,7 +161,7 @@ const UserTour = () => {
     }
   };
 
-  if (!isAuthenticated) return null;
+  if (isLoading || !isAuthenticated) return null;
 
   return (
     <Joyride

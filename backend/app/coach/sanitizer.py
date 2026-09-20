@@ -85,13 +85,13 @@ class LLMContextSanitizer:
         # 5. Retrieved Knowledge (limit to max_knowledge_chunks, format cleanly with source metadata)
         sanitized_chunks = []
         for idx, chunk in enumerate(retrieved_knowledge[:max_knowledge_chunks], start=1):
-            meta = chunk.get("metadata", {})
+            # SearchResult is serialized as a flat dict — fields are at top level, not nested under "metadata"
             sanitized_chunks.append({
                 "chunk_id": f"SOURCE_{idx}",
-                "source": meta.get("source", "Parenting Knowledge Base"),
-                "page": meta.get("page"),
-                "category": meta.get("category", "General"),
-                "tags": meta.get("tags", []),
+                "source": chunk.get("source", "Parenting Knowledge Base"),
+                "page": chunk.get("page"),
+                "category": chunk.get("category", "General"),
+                "tags": chunk.get("tags", []),
                 "content": chunk.get("content", "").strip(),
             })
 

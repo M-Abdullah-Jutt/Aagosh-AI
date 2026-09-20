@@ -59,7 +59,6 @@ function Avatar({ large = false }) {
 function MessageBubble({ msg }) {
   const { t, formatTime } = useLanguage();
   const isUser = msg.role === 'user';
-  const [srcOpen, setSrcOpen] = useState(false);
 
   const keyPoints = msg.key_points?.length ? msg.key_points
     : (msg.metadata?.key_points?.length ? msg.metadata.key_points : []);
@@ -128,22 +127,27 @@ function MessageBubble({ msg }) {
           )}
 
           {sources.length > 0 && (
-            <div className="mx-4 mb-3">
-              <button
-                onClick={() => setSrcOpen(v => !v)}
-                className="text-[10px] text-slate-400 hover:text-slate-600 flex items-center gap-1 transition"
-              >
-                {srcOpen ? '▾' : '▸'} {t('coach.sourcesCited', { count: sources.length, n: sources.length })}
-              </button>
-              {srcOpen && (
-                <div className="mt-1.5 flex flex-wrap gap-1.5">
-                  {sources.map((s, i) => (
-                    <span key={i} className="bg-slate-100 border border-slate-200 text-slate-600 text-[10px] px-2 py-0.5 rounded font-mono">
-                      {s.source}{s.page ? ` · p.${s.page}` : ''}
+            <div className="mx-4 mb-3.5 bg-sky-50 border border-sky-100 rounded-xl p-3">
+              <p className="text-[10px] font-bold text-sky-700 uppercase tracking-widest mb-2">
+                📚 {t('coach.citedSources')}
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {sources.map((s, i) => {
+                  const label = s.display_name || s.source || 'Source';
+                  return (
+                    <span
+                      key={i}
+                      className="inline-flex items-center gap-1 bg-white border border-sky-200 text-sky-800 text-[11px] font-semibold px-2.5 py-1 rounded-full shadow-sm"
+                    >
+                      <span className="w-1.5 h-1.5 rounded-full bg-sky-500 shrink-0" />
+                      {label}
+                      {s.page ? (
+                        <span className="text-sky-400 font-normal">· p.{s.page}</span>
+                      ) : null}
                     </span>
-                  ))}
-                </div>
-              )}
+                  );
+                })}
+              </div>
             </div>
           )}
 

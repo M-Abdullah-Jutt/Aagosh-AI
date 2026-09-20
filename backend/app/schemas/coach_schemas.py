@@ -55,6 +55,7 @@ class SourceReference(BaseModel):
     source: str
     page: Optional[int] = None
     category: Optional[str] = None
+    display_name: Optional[str] = None  # Human-readable source label, e.g. "CDC", "UNICEF", "Art of Parenting"
 
 
 class ContextUsed(BaseModel):

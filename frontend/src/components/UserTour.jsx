@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Joyride, STATUS, ACTIONS } from 'react-joyride';
 import { useAuth } from '../context/AuthContext';
 import { X, Sparkles } from 'lucide-react';
@@ -136,6 +136,14 @@ const UserTour = () => {
   const { isAuthenticated, isLoading, user } = useAuth();
   const [run, setRun] = useState(false);
 
+  // Keep a ref to the current user ID so the Joyride callback closure always
+  // reads the latest value — even if the component re-renders between mount
+  // and when the user dismisses/skips the tour.
+  const userIdRef = useRef(user?.id);
+  useEffect(() => {
+    userIdRef.current = user?.id;
+  }, [user?.id]);
+
   useEffect(() => {
     // Show the tour only when:
     //  1. Auth state has fully resolved (not still validating session)
@@ -157,7 +165,8 @@ const UserTour = () => {
       action === ACTIONS.CLOSE;
     if (isDone) {
       setRun(false);
-      markTourSeen(user?.id);
+      // Use the ref so we always have the current ID regardless of closure age.
+      markTourSeen(userIdRef.current);
     }
   };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookOpen, ExternalLink, Database, FileText, Baby, ShieldCheck, Layers } from 'lucide-react';
+import { BookOpen, ExternalLink, Database, FileText, Baby, ShieldCheck, Layers, GraduationCap } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
 
 const CDC_SOURCES = [
@@ -34,6 +34,14 @@ const CDC_SOURCES = [
     iconBg: 'bg-amber-50 border-amber-100',
     tagColor: 'bg-amber-50 text-amber-700 border-amber-200',
     url: 'https://www.unicef.org/pakistan/early-childhood-development',
+  },
+  {
+    id: 'art_of_parenting',
+    icon: GraduationCap,
+    iconColor: 'text-teal-600',
+    iconBg: 'bg-teal-50 border-teal-100',
+    tagColor: 'bg-teal-50 text-teal-700 border-teal-200',
+    url: 'https://nip.edu.pk/art_of_parenting/',
   },
 ];
 

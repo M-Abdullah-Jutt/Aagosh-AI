@@ -122,28 +122,57 @@ class ParentingSafetyValidator:
         is_valid = len(violations) == 0
         return is_valid, violations
 
+    # -----------------------------------------------------------------------
+    # Source display name mapping
+    # -----------------------------------------------------------------------
+
+    # Maps substrings (lowercased) found in raw source_name values to the
+    # human-friendly label shown in the UI "Cited Sources" section.
+    _SOURCE_DISPLAY_NAMES = [
+        ("art of parenting",  "Art of Parenting"),
+        ("nip.edu.pk",        "Art of Parenting"),
+        ("art_of_parenting",  "Art of Parenting"),
+        ("unicef",            "UNICEF"),
+        ("cdc",               "CDC"),
+    ]
+
+    @classmethod
+    def _resolve_display_name(cls, raw_source: str) -> str:
+        """Return a human-readable display name for a raw source string."""
+        lower = raw_source.lower()
+        for keyword, label in cls._SOURCE_DISPLAY_NAMES:
+            if keyword in lower:
+                return label
+        # Fall back to the raw string (capitalised) if nothing matches
+        return raw_source.strip() or "Parenting Knowledge Base"
+
     @staticmethod
     def generate_programmatic_citations(retrieved_knowledge: List[Dict[str, Any]]) -> List[SourceReference]:
         """
         Generates trusted source references programmatically directly from the retrieved RAG chunks,
         ensuring the LLM cannot hallucinate sources.
+
+        SearchResult is serialized as a *flat* dict — source, page, and category
+        live at the top level, NOT nested under a "metadata" key.
         """
         sources = []
         seen = set()
 
         for chunk in retrieved_knowledge:
-            meta = chunk.get("metadata", {})
-            src = meta.get("source", "Parenting Knowledge Base")
-            page = meta.get("page")
-            category = meta.get("category")
+            # Flat SearchResult dict — read fields directly from top level
+            src = chunk.get("source", "") or "Parenting Knowledge Base"
+            page = chunk.get("page")
+            category = chunk.get("category")
 
             key = (src, page, category)
             if key not in seen:
                 seen.add(key)
+                display_name = ParentingSafetyValidator._resolve_display_name(src)
                 sources.append(SourceReference(
                     source=src,
                     page=page,
-                    category=category
+                    category=category,
+                    display_name=display_name,
                 ))
 
         return sources

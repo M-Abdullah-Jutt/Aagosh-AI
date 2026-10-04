@@ -46,6 +46,16 @@ class Settings(BaseSettings):
     MAX_RESPONSE_TOKENS: int = 1000
     MAX_CONVERSATION_MESSAGES: int = 10
 
+    # Live Parenting & Audio / Avatar Provider Settings
+    CARTESIA_API_KEY: str = ""
+    CARTESIA_VOICE_ID: str = "79a125e8-cd45-4c13-8a67-188112f4dd22"
+    SIMLI_API_KEY: str = ""
+    SIMLI_FACE_ID: str = "f0ba4efe-7946-45de-9955-c04a04c367b9"
+
+    # LiveKit Settings
+    LIVEKIT_URL: str = ""
+    LIVEKIT_API_KEY: str = ""
+    LIVEKIT_API_SECRET: str = ""
     model_config = SettingsConfigDict(
         env_file=os.path.join(BASE_DIR, ".env"),
         env_file_encoding="utf-8",

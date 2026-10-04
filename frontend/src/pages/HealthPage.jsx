@@ -33,7 +33,7 @@ const CDC_SOURCES = [
     iconColor: 'text-amber-600',
     iconBg: 'bg-amber-50 border-amber-100',
     tagColor: 'bg-amber-50 text-amber-700 border-amber-200',
-    url: 'https://www.unicef.org/pakistan/early-childhood-development',
+    url: 'https://www.unicef.org/pakistan/early-childhood-development-ecd-0',
   },
   {
     id: 'art_of_parenting',

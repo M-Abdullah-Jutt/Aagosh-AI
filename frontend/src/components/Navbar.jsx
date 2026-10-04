@@ -38,10 +38,12 @@ export const Navbar = () => {
 
           {/* Desktop Navigation Links */}
           <nav className="hidden md:flex items-center space-x-2 sm:space-x-3">
-            <NavLink to="/" className={navLinkClass()}>
+            {!isAuthenticated && (
+              <NavLink to="/" className={navLinkClass()}>
               <Home className="w-4 h-4 text-emerald-600" />
               <span className="hidden md:inline">{t('nav.home')}</span>
             </NavLink>
+            )}
 
             {isAuthenticated && (
               <>
@@ -56,10 +58,12 @@ export const Navbar = () => {
               </>
             )}
 
-            <NavLink to="/health" className={navLinkClass('tour-knowledge')}>
+            {!isAuthenticated && (
+              <NavLink to="/health" className={navLinkClass('tour-knowledge')}>
               <BookOpen className="w-4 h-4 text-emerald-600" />
               <span className="hidden md:inline">{t('nav.knowledgeBase')}</span>
             </NavLink>
+            )}
 
             {/* Language Selector */}
             <div className="flex items-center space-x-2 pl-2 border-l border-stone-200">
@@ -118,7 +122,8 @@ export const Navbar = () => {
       {/* Mobile Menu Dropdown */}
       {isOpen && (
         <div className="md:hidden bg-white border-b border-stone-200 px-4 pt-2 pb-4 space-y-2 shadow-lg">
-          <NavLink
+          {!isAuthenticated && (
+            <NavLink
             to="/"
             onClick={() => setIsOpen(false)}
             className={navLinkClass()}
@@ -126,6 +131,7 @@ export const Navbar = () => {
             <Home className="w-4 h-4 text-emerald-600" />
             <span>{t('nav.home')}</span>
           </NavLink>
+          )}
 
           {isAuthenticated && (
             <>
@@ -148,7 +154,8 @@ export const Navbar = () => {
             </>
           )}
 
-          <NavLink
+          {!isAuthenticated && (
+            <NavLink
             to="/health"
             onClick={() => setIsOpen(false)}
             className={navLinkClass('tour-knowledge')}
@@ -156,6 +163,7 @@ export const Navbar = () => {
             <BookOpen className="w-4 h-4 text-emerald-600" />
             <span>{t('nav.knowledgeBase')}</span>
           </NavLink>
+          )}
 
           <div className="pt-2 border-t border-stone-200">
             {isAuthenticated ? (

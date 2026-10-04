@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { childrenService } from '../../services/childrenService';
 import { getGoalTypeLabel, getPriorityBadge } from '../../utils/goalConstants';
 import { useLanguage } from '../../i18n/LanguageContext';
+import ChildDetailsTour from '../../components/ChildDetailsTour';
 import {
   ArrowLeft,
   User,
@@ -16,6 +17,7 @@ import {
   CheckCircle2,
   XCircle,
   MessageCircle,
+  Mic,
 } from 'lucide-react';
 
 export const ChildDetailsPage = () => {
@@ -93,6 +95,7 @@ export const ChildDetailsPage = () => {
 
   return (
     <div className="min-h-[85vh] bg-slate-50/50 py-8 sm:py-10 px-4 sm:px-6 lg:px-8">
+      <ChildDetailsTour />
       <div className="max-w-4xl mx-auto space-y-6 sm:space-y-8">
         {/* Navigation & Actions Header */}
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -160,14 +163,21 @@ export const ChildDetailsPage = () => {
             <div className="flex flex-wrap items-center gap-2 sm:gap-3">
               <Link
                 to={`/children/${child.id}/coach`}
-                className="inline-flex items-center space-x-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl font-semibold text-xs shadow-sm hover:shadow-md transition"
+                className="tour-ask-ai inline-flex items-center space-x-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl font-semibold text-xs shadow-sm hover:shadow-md transition"
               >
                 <MessageCircle className="w-4 h-4" />
                 <span>Ask AI Coach</span>
               </Link>
               <Link
+                to={`/live-parenting?childId=${child.id}`}
+                className="tour-live-parenting inline-flex items-center space-x-2 bg-gradient-to-r from-emerald-700 via-teal-700 to-emerald-800 hover:from-emerald-600 hover:to-teal-600 text-white px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl font-semibold text-xs shadow-sm hover:shadow-md transition"
+              >
+                <Mic className="w-4 h-4 text-emerald-300 animate-pulse" />
+                <span>Live Parenting</span>
+              </Link>
+              <Link
                 to={`/children/${child.id}/analytics`}
-                className="inline-flex items-center space-x-2 bg-indigo-600 hover:bg-indigo-700 text-white px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl font-semibold text-xs shadow-sm hover:shadow transition"
+                className="tour-insights inline-flex items-center space-x-2 bg-indigo-600 hover:bg-indigo-700 text-white px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl font-semibold text-xs shadow-sm hover:shadow transition"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
@@ -176,7 +186,7 @@ export const ChildDetailsPage = () => {
               </Link>
               <Link
                 to={`/children/${child.id}/check-ins`}
-                className="inline-flex items-center space-x-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl font-semibold text-xs shadow-sm hover:shadow transition"
+                className="tour-check-ins inline-flex items-center space-x-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl font-semibold text-xs shadow-sm hover:shadow transition"
               >
                 <Calendar className="w-4 h-4" />
                 <span>Check-Ins</span>

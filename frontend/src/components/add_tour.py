@@ -1,20 +1,17 @@
-import React, { useState, useEffect, useRef } from 'react';
+import os
+import sys
+
+file_path = r"e:\Agentic AI Projects\Aagosh AI\frontend\src\components\ChildDetailsTour.jsx"
+
+content = """import React, { useState, useEffect, useRef } from 'react';
 import { Joyride, STATUS, ACTIONS } from 'react-joyride';
 import { useAuth } from '../context/AuthContext';
 import { X, Sparkles } from 'lucide-react';
 
-// ─── Helpers ────────────────────────────────────────────────────────────────
-
-/**
- * Returns a per-user localStorage key so that the tour is tracked
- * independently for every account on this browser.
- * A generic key ('hasSeenTour') would wrongly hide the tour for a new user
- * who happens to share the browser with someone who already dismissed it.
- */
-const getTourKey = (userId) => `aaghosh_tour_seen_${userId}`;
+const getTourKey = (userId) => `aaghosh_child_tour_seen_${userId}`;
 
 const hasSeenTour = (userId) => {
-  if (!userId) return true; // safety: don't show if no user
+  if (!userId) return true;
   try {
     return localStorage.getItem(getTourKey(userId)) === 'true';
   } catch {
@@ -28,8 +25,6 @@ const markTourSeen = (userId) => {
     localStorage.setItem(getTourKey(userId), 'true');
   } catch { /* ignore */ }
 };
-
-// ─── Custom Tooltip ──────────────────────────────────────────────────────────
 
 const CustomTooltip = ({
   index,
@@ -75,7 +70,7 @@ const CustomTooltip = ({
             Skip
           </button>
         ) : (
-          <span /> // placeholder for flex layout
+          <span />
         )}
 
         <div className="flex items-center gap-2">
@@ -91,7 +86,7 @@ const CustomTooltip = ({
             {...primaryProps}
             className="px-5 py-2 text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl transition-colors shadow-sm"
           >
-            {isLastStep ? "Got it, let's start! 🚀" : 'Next'}
+            {isLastStep ? "Got it! 🚀" : 'Next'}
           </button>
         </div>
       </div>
@@ -99,59 +94,47 @@ const CustomTooltip = ({
   );
 };
 
-// ─── Tour Steps ───────────────────────────────────────────────────────────────
-
 const TOUR_STEPS = [
   {
     target: 'body',
-    content:
-      "Welcome to Aaghosh AI! You're in the right place. Let's take 30 seconds to show you around your new parenting companion.",
+    content: "Welcome to your child's profile! Let's quickly show you the key tools available to help you track progress and get AI-powered parenting advice.",
     placement: 'center',
     disableBeacon: true,
-    title: '👋 Welcome!',
+    title: '🧒 Child Profile Tour',
   },
   {
-    target: '.tour-dashboard',
-    content:
-      'Your Dashboard gives you a high-level overview — active goals, recent activity, and a quick view of your family profiles.',
-    title: '🏠 Dashboard',
+    target: '.tour-ask-ai',
+    content: "Need advice for a specific situation? The 'Ask AI Coach' tab connects you with an intelligent assistant trained in evidence-based parenting strategies.",
+    title: '🤖 Ask AI Coach',
   },
   {
-    target: '.tour-children',
-    content:
-      "Add your children's profiles here. The more context you add (age, goals, observations), the more personalised the AI Coach's guidance becomes.",
-    title: '👶 Children & Profiles',
+    target: '.tour-live-parenting',
+    content: "Experience real-time support! Use the 'Live Parenting' feature to have a voice conversation with Dr. Sophia for immediate guidance during stressful moments.",
+    title: '🎙️ Live AI Coach',
   },
   {
-    target: '.tour-knowledge',
-    content:
-      'Our AI Coach draws from a curated, evidence-based parenting knowledge base. You can explore and search it here — full transparency, always.',
-    title: '📚 Knowledge Base',
+    target: '.tour-insights',
+    content: "The 'Insights' tab analyzes all your logged behavior events and check-ins to provide actionable trends, highlighting common triggers and emotional patterns.",
+    title: '📊 Insights',
+  },
+  {
+    target: '.tour-check-ins',
+    content: "Log daily moods and specific behavioral events in 'Check-Ins'. Consistent tracking helps the AI give you much better, personalized advice.",
+    title: '📝 Check-Ins',
   },
 ];
 
-// ─── Main Component ───────────────────────────────────────────────────────────
-
-const UserTour = () => {
+const ChildDetailsTour = () => {
   const { isAuthenticated, isLoading, user } = useAuth();
   const [run, setRun] = useState(false);
 
-  // Keep a ref to the current user ID so the Joyride callback closure always
-  // reads the latest value — even if the component re-renders between mount
-  // and when the user dismisses/skips the tour.
   const userIdRef = useRef(user?.id);
   useEffect(() => {
     userIdRef.current = user?.id;
   }, [user?.id]);
 
   useEffect(() => {
-    // Show the tour only when:
-    //  1. Auth state has fully resolved (not still validating session)
-    //  2. The user is authenticated
-    //  3. We have a user ID to scope the key
-    //  4. This specific user has never seen the tour before
     if (!isLoading && isAuthenticated && user?.id && !hasSeenTour(user.id)) {
-      // Small delay so the DOM is fully rendered before Joyride tries to attach tooltips
       const timer = setTimeout(() => setRun(true), 800);
       return () => clearTimeout(timer);
     }
@@ -159,13 +142,9 @@ const UserTour = () => {
 
   const handleJoyrideCallback = (data) => {
     const { status, action } = data;
-    // Mark tour as seen when finished, skipped, or dismissed via the ✕ button.
-    const isDone =
-      [STATUS.FINISHED, STATUS.SKIPPED].includes(status) ||
-      action === ACTIONS.CLOSE;
+    const isDone = [STATUS.FINISHED, STATUS.SKIPPED].includes(status) || action === ACTIONS.CLOSE;
     if (isDone) {
       setRun(false);
-      // Use the ref so we always have the current ID regardless of closure age.
       markTourSeen(userIdRef.current);
     }
   };
@@ -186,11 +165,67 @@ const UserTour = () => {
       styles={{
         options: {
           zIndex: 100000,
-          arrowColor: '#ecfdf5', // emerald-50 — matches the tooltip gradient start
+          arrowColor: '#ecfdf5',
         },
       }}
     />
   );
 };
 
-export default UserTour;
+export default ChildDetailsTour;
+"""
+
+with open(file_path, "w", encoding="utf-8") as f:
+    f.write(content)
+
+print("ChildDetailsTour.jsx created.")
+
+import re
+child_details_path = r"e:\Agentic AI Projects\Aagosh AI\frontend\src\pages\Children\ChildDetailsPage.jsx"
+
+with open(child_details_path, "r", encoding="utf-8") as f:
+    page_content = f.read()
+
+# Add import
+if "import ChildDetailsTour from '../../components/ChildDetailsTour';" not in page_content:
+    page_content = page_content.replace(
+        "import { useLanguage } from '../../i18n/LanguageContext';",
+        "import { useLanguage } from '../../i18n/LanguageContext';\nimport ChildDetailsTour from '../../components/ChildDetailsTour';"
+    )
+
+# Add Tour Component
+if "<ChildDetailsTour />" not in page_content:
+    page_content = page_content.replace(
+        '<div className="min-h-[85vh] bg-slate-50/50 py-8 sm:py-10 px-4 sm:px-6 lg:px-8">',
+        '<div className="min-h-[85vh] bg-slate-50/50 py-8 sm:py-10 px-4 sm:px-6 lg:px-8">\n      <ChildDetailsTour />'
+    )
+
+# Add classes
+page_content = re.sub(
+    r'(<Link\s+to=\{`/children/\$\{child\.id\}/coach`\}\s+className=")(inline-flex)',
+    r'\1tour-ask-ai \2',
+    page_content
+)
+
+page_content = re.sub(
+    r'(<Link\s+to=\{`/live-parenting\?childId=\$\{child\.id\}`\}\s+className=")(inline-flex)',
+    r'\1tour-live-parenting \2',
+    page_content
+)
+
+page_content = re.sub(
+    r'(<Link\s+to=\{`/children/\$\{child\.id\}/analytics`\}\s+className=")(inline-flex)',
+    r'\1tour-insights \2',
+    page_content
+)
+
+page_content = re.sub(
+    r'(<Link\s+to=\{`/children/\$\{child\.id\}/check-ins`\}\s+className=")(inline-flex)',
+    r'\1tour-check-ins \2',
+    page_content
+)
+
+with open(child_details_path, "w", encoding="utf-8") as f:
+    f.write(page_content)
+
+print("ChildDetailsPage.jsx updated.")

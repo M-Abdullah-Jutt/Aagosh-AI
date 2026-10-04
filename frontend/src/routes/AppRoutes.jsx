@@ -17,6 +17,7 @@ import CheckInDetailsPage from '../pages/CheckIns/CheckInDetailsPage';
 import EditCheckInPage from '../pages/CheckIns/EditCheckInPage';
 import AnalyticsPage from '../pages/Analytics/AnalyticsPage';
 import CoachPage from '../pages/Coach/CoachPage';
+import LiveParentingPage from '../pages/LiveParenting/LiveParentingPage';
 import ProtectedRoute from '../components/ProtectedRoute';
 
 export const AppRoutes = () => {
@@ -127,6 +128,16 @@ export const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <CoachPage />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Live Parenting Studio */}
+      <Route
+        path="/live-parenting"
+        element={
+          <ProtectedRoute>
+            <LiveParentingPage />
           </ProtectedRoute>
         }
       />

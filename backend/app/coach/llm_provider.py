@@ -296,13 +296,16 @@ class GeminiLLMProvider(LLMProvider):
             url = f"{self.GEMINI_API_BASE}/{self._model_name}:generateContent?key={self.api_key}"
 
             # Use Gemini's systemInstruction field for proper system prompting
-            system_instruction_text = (
-                f"{system_prompt}\n\n"
-                f"IMPORTANT: You MUST respond with a valid JSON object only. "
-                f"The JSON must have exactly these keys: \"answer\", \"key_points\" (list of strings), "
-                f"\"suggested_steps\" (list of strings). The language of every string VALUE is controlled "
-                f"by the RESPONSE LANGUAGE section above and MUST be followed exactly."
-            )
+            if "strictly matching this format" in system_prompt or "Output valid JSON only" in system_prompt:
+                system_instruction_text = system_prompt
+            else:
+                system_instruction_text = (
+                    f"{system_prompt}\n\n"
+                    f"IMPORTANT: You MUST respond with a valid JSON object only. "
+                    f"The JSON must have exactly these keys: \"answer\", \"key_points\" (list of strings), "
+                    f"\"suggested_steps\" (list of strings). The language of every string VALUE is controlled "
+                    f"by the RESPONSE LANGUAGE section above and MUST be followed exactly."
+                )
 
             payload = {
                 "systemInstruction": {
@@ -412,13 +415,16 @@ class GroqLLMProvider(LLMProvider):
             # Initialize client with explicitly provided API key
             client = Groq(api_key=self.api_key)
             
-            system_instruction_text = (
-                f"{system_prompt}\n\n"
-                f"IMPORTANT: You MUST respond with a valid JSON object only. "
-                f"The JSON must have exactly these keys: \"answer\", \"key_points\" (list of strings), "
-                f"\"suggested_steps\" (list of strings). The language of every string VALUE is controlled "
-                f"by the RESPONSE LANGUAGE section above and MUST be followed exactly."
-            )
+            if "strictly matching this format" in system_prompt or "Output valid JSON only" in system_prompt:
+                system_instruction_text = system_prompt
+            else:
+                system_instruction_text = (
+                    f"{system_prompt}\n\n"
+                    f"IMPORTANT: You MUST respond with a valid JSON object only. "
+                    f"The JSON must have exactly these keys: \"answer\", \"key_points\" (list of strings), "
+                    f"\"suggested_steps\" (list of strings). The language of every string VALUE is controlled "
+                    f"by the RESPONSE LANGUAGE section above and MUST be followed exactly."
+                )
 
             # We set stream=False here because the existing architecture expects 
             # a complete parsed dictionary in return, not an HTTP stream chunk.

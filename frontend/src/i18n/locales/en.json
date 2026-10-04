@@ -22,7 +22,7 @@
   "common.notAvailable": "N/A",
   "common.age": "Age: {age}",
   "common.backToChildren": "Back to Children",
-  "common.backToProfile": "← Back to {name}'s Profile",
+  "common.backToProfile": "Back to {name}'s Profile",
   "common.validationError": "Validation error occurred.",
 
   "age.newborn": "Newborn",
@@ -58,7 +58,7 @@
 
   "landing.heroTitle": "Nurturing Every Stage of Your Child's Journey",
   "landing.heroBody": "{tagline} Designed to bring clarity, calm, and actionable positive parenting insights to daily life.",
-  "landing.exploreKnowledge": "Explore Knowledge Base",
+  "landing.exploreDashboard": "Explore Dashboard",
   "landing.loopTitle": "The Conceptual Loop",
   "landing.loopSubtitle": "Assess → Track → Guide → Adapt",
   "landing.stepLabel": "Step {n}: {step}",
@@ -530,5 +530,17 @@
 
   "status.checking": "Checking connection...",
   "status.offline": "Service Unavailable",
-  "status.connected": "Connected"
+  "status.connected": "Connected",
+
+  "dashboard.badge": "Parent Dashboard",
+  "dashboard.welcome": "Welcome back, {name}",
+  "dashboard.parentFallback": "Parent",
+  "dashboard.welcomeSubtitle": "Your parenting command center with real-time live AI guidance, child milestones, and daily check-ins.",
+  "dashboard.logOut": "Log Out",
+  "dashboard.profileTitle": "Parent Account Profile",
+  "dashboard.fullName": "Full Name",
+  "dashboard.emailAddress": "Email Address",
+  "dashboard.memberSince": "Member Since",
+  "liveParenting.title": "Live Parenting Guidance Studio",
+  "liveParenting.subtitle": "Real-time AI listening during your parent-child conversation with instant words to say, vocal tone hints, and de-escalation steps."
 }

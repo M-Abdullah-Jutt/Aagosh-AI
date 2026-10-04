@@ -22,7 +22,7 @@
   "common.notAvailable": "دستیاب نہیں",
   "common.age": "عمر: {age}",
   "common.backToChildren": "بچوں کی فہرست پر واپس",
-  "common.backToProfile": "→ {name} کی پروفائل پر واپس",
+  "common.backToProfile": "{name} کی پروفائل پر واپس",
   "common.validationError": "تصدیق میں نقص واقع ہوا۔",
 
   "age.newborn": "نوزائیدہ",
@@ -58,7 +58,7 @@
 
   "landing.heroTitle": "آپ کے بچے کے سفر کے ہر مرحلے کی پرورش",
   "landing.heroBody": "{tagline} روزمرہ زندگی میں وضاحت، سکون اور مثبت پرورش کے قابلِ عمل مشورے لانے کے لیے ڈیزائن کیا گیا۔",
-  "landing.exploreKnowledge": "علمی ذرائع دیکھیں",
+  "landing.exploreDashboard": "ڈیش بورڈ دیکھیں",
   "landing.loopTitle": "بنیادی گردش",
   "landing.loopSubtitle": "جانچ ← ریکارڈ ← رہنمائی ← مطابقت",
   "landing.stepLabel": "مرحلہ {n}: {step}",
@@ -529,5 +529,17 @@
 
   "status.checking": "رابطہ جانچا جا رہا ہے...",
   "status.offline": "سروس دستیاب نہیں",
-  "status.connected": "منسلک"
+  "status.connected": "منسلک",
+
+  "dashboard.badge": "والدین کا ڈیش بورڈ",
+  "dashboard.welcome": "خوش آمدید، {name}",
+  "dashboard.parentFallback": "محترم والد/والدہ",
+  "dashboard.welcomeSubtitle": "آپ کا پیرنٹنگ کمانڈ سینٹر جہاں ریئل ٹائم لائیو رہنمائی، بچوں کی نشوونما اور روزمرہ جائزہ موجود ہے۔",
+  "dashboard.logOut": "لاگ آؤٹ",
+  "dashboard.profileTitle": "والدین اکاؤنٹ پروفائل",
+  "dashboard.fullName": "مکمل نام",
+  "dashboard.emailAddress": "ای میل پتہ",
+  "dashboard.memberSince": "شمولیت کی تاریخ",
+  "liveParenting.title": "لائیو پیرنٹنگ گائیڈنس اسٹوڈیو",
+  "liveParenting.subtitle": "بچے کے ساتھ بات چیت کے دوران ریئل ٹائم اے آئی سننے اور فوری الفاظ و لہجے کی رہنمائی۔"
 }

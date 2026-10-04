@@ -5,6 +5,7 @@ import coachService from '../../services/coachService';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { localizeOptions } from '../../utils/i18nOptions';
 import { ANALYSIS_PERIODS } from '../../utils/checkInConstants';
+import { ArrowLeft } from 'lucide-react';
 
 /** Renders **bold** markdown and \n as <br/> */
 function RichText({ text }) {
@@ -370,7 +371,8 @@ export default function CoachPage() {
             to={`/children/${childId}`}
             className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-emerald-700 transition mb-1"
           >
-            {t('common.backToProfile', { name: child?.first_name || t('coach.childLabelFallback') })}
+            <ArrowLeft className="w-4 h-4" />
+            <span>{t('common.backToProfile', { name: child?.first_name || t('coach.childLabelFallback') })}</span>
           </Link>
           <h1 className="text-xl sm:text-2xl font-bold text-slate-900 flex flex-wrap items-center gap-2">
             {t('coach.title')}

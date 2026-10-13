@@ -91,7 +91,7 @@ export const CodedAIAvatar = ({
     : [4, 6, 8, 6, 4];
 
   return (
-    <div className="relative flex flex-col items-center justify-center p-6 bg-gradient-to-b from-slate-900 via-slate-800 to-indigo-950 rounded-3xl border border-slate-700/60 shadow-xl overflow-hidden text-white select-none">
+    <div className="relative flex flex-col items-center justify-center p-6 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 rounded-3xl border border-slate-700/60 shadow-xl overflow-hidden text-white select-none">
       {/* Background Energy Matrix & Glow */}
       <div
         className={`absolute inset-0 transition-opacity duration-700 pointer-events-none ${

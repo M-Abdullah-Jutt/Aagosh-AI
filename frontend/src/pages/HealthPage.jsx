@@ -6,9 +6,9 @@ const CDC_SOURCES = [
   {
     id: 'stacks',
     icon: Database,
-    iconColor: 'text-blue-600',
-    iconBg: 'bg-blue-50 border-blue-100',
-    tagColor: 'bg-blue-50 text-blue-700 border-blue-200',
+    iconColor: 'text-brand-600',
+    iconBg: 'bg-amber-50 border-amber-100',
+    tagColor: 'bg-amber-50 text-brand-700 border-amber-200',
     url: 'https://stacks.cdc.gov',
   },
   {
@@ -48,7 +48,7 @@ const CDC_SOURCES = [
 const HOW_IT_WORKS = [
   { step: '01', color: 'bg-slate-800 text-white' },
   { step: '02', color: 'bg-emerald-700 text-white' },
-  { step: '03', color: 'bg-indigo-700 text-white' },
+  { step: '03', color: 'bg-brand-700 text-white' },
   { step: '04', color: 'bg-teal-700 text-white' },
 ];
 
@@ -75,13 +75,13 @@ export const HealthPage = () => {
       </div>
 
       {/* Publisher banner */}
-      <div className="bg-gradient-to-r from-blue-700 to-blue-800 text-white rounded-2xl p-6 flex flex-col sm:flex-row sm:items-center gap-4 shadow-md">
+      <div className="bg-gradient-to-r from-brand-700 to-brand-700 text-white rounded-2xl p-6 flex flex-col sm:flex-row sm:items-center gap-4 shadow-md">
         <div className="w-14 h-14 rounded-xl bg-white/15 flex items-center justify-center shrink-0">
           <BookOpen className="w-7 h-7 text-white" />
         </div>
         <div className="flex-1">
           <h2 className="text-lg font-bold">{t('knowledge.publisherName')}</h2>
-          <p className="text-blue-100 text-sm mt-0.5 leading-relaxed">
+          <p className="text-amber-100 text-sm mt-0.5 leading-relaxed">
             {t('knowledge.publisherDescription')}
           </p>
         </div>
@@ -89,7 +89,7 @@ export const HealthPage = () => {
           href="https://www.cdc.gov"
           target="_blank"
           rel="noopener noreferrer"
-          className="shrink-0 inline-flex items-center gap-1.5 text-xs font-semibold text-blue-100 hover:text-white border border-white/25 hover:border-white/50 px-3 py-2 rounded-lg transition"
+          className="shrink-0 inline-flex items-center gap-1.5 text-xs font-semibold text-amber-100 hover:text-white border border-white/25 hover:border-white/50 px-3 py-2 rounded-lg transition"
         >
           {t('knowledge.visitCdc')} <ExternalLink className="w-3 h-3" />
         </a>
@@ -144,7 +144,7 @@ export const HealthPage = () => {
                       href={source.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 hover:text-blue-800 transition"
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-600 hover:text-brand-700 transition"
                     >
                       {t('knowledge.visitSource')} <ExternalLink className="w-3 h-3" />
                     </a>

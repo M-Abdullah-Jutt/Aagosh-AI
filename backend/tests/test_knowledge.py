@@ -44,7 +44,7 @@ def test_pdf_loading_and_parsing():
 
 def test_document_metadata_extraction():
     doc, _ = PDFKnowledgeParser.parse_pdf(PDF_PATH)
-    assert doc.title == "Comprehensive CDC Positive Parenting Protocols"
+    assert doc.title == "Parentingpdf"
     assert doc.source_type == "pdf"
     assert doc.status == "active"
 

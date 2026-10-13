@@ -18,7 +18,9 @@ import EditCheckInPage from '../pages/CheckIns/EditCheckInPage';
 import AnalyticsPage from '../pages/Analytics/AnalyticsPage';
 import CoachPage from '../pages/Coach/CoachPage';
 import LiveParentingPage from '../pages/LiveParenting/LiveParentingPage';
+import ParentPracticePage from '../pages/ParentPractice/ParentPracticePage';
 import ProtectedRoute from '../components/ProtectedRoute';
+import AdminDashboard from '../pages/Admin/AdminDashboard';
 
 export const AppRoutes = () => {
   return (
@@ -132,6 +134,16 @@ export const AppRoutes = () => {
         }
       />
 
+      {/* Parent Practice Lab */}
+      <Route
+        path="/practice"
+        element={
+          <ProtectedRoute>
+            <ParentPracticePage />
+          </ProtectedRoute>
+        }
+      />
+
       {/* Live Parenting Studio */}
       <Route
         path="/live-parenting"
@@ -140,6 +152,12 @@ export const AppRoutes = () => {
             <LiveParentingPage />
           </ProtectedRoute>
         }
+      />
+
+      {/* Admin Panel (Hidden Endpoint) */}
+      <Route
+        path="/admin/*"
+        element={<AdminDashboard />}
       />
 
       <Route path="*" element={<NotFoundPage />} />

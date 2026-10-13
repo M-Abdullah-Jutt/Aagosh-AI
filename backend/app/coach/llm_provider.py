@@ -415,7 +415,12 @@ class GroqLLMProvider(LLMProvider):
             # Initialize client with explicitly provided API key
             client = Groq(api_key=self.api_key)
             
-            if "strictly matching this format" in system_prompt or "Output valid JSON only" in system_prompt:
+            if (
+                "strictly matching this format" in system_prompt
+                or "Output valid JSON only" in system_prompt
+                or "strictly in valid JSON" in system_prompt
+                or "Strictly respond in JSON format" in system_prompt
+            ):
                 system_instruction_text = system_prompt
             else:
                 system_instruction_text = (

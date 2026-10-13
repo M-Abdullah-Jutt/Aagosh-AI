@@ -662,7 +662,7 @@ export const LiveParentingStudioModal = ({
                 <div className="pt-3 border-t border-slate-700 flex justify-center">
                   <button
                     onClick={handleSendToCoach}
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-xs font-semibold flex items-center space-x-2 transition shadow-lg shadow-indigo-900/20"
+                    className="bg-brand-600 hover:bg-brand-700 text-white px-5 py-2.5 rounded-xl text-xs font-semibold flex items-center space-x-2 transition shadow-lg shadow-brand-900/20"
                   >
                     <Send className="w-4 h-4" />
                     <span>Get AI Guidance</span>

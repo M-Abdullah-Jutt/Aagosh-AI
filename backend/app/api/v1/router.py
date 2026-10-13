@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.api.v1.endpoints import health, auth, children, check_ins, analytics, knowledge, context, coach, live_parenting
+from app.api.v1.endpoints import health, auth, children, check_ins, analytics, knowledge, context, coach, live_parenting, parent_practice, feedback, admin
 
 api_v1_router = APIRouter()
 
@@ -35,6 +35,22 @@ api_v1_router.include_router(
     live_parenting.router,
     prefix="/live-parenting",
     tags=["Live Parenting Guidance"]
+)
+api_v1_router.include_router(
+    parent_practice.router,
+    prefix="/practice",
+    tags=["Parent Practice Simulation"]
+)
+api_v1_router.include_router(
+    feedback.router,
+    prefix="/feedback",
+    tags=["Parent Guidance Feedback"]
+)
+
+api_v1_router.include_router(
+    admin.router,
+    prefix="/admin",
+    tags=["Admin Dashboard API"]
 )
 
 

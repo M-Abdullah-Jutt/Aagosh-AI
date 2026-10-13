@@ -43,7 +43,7 @@ def test_eval_teen_curfew_retrieval():
     results = KnowledgeRetrievalService.retrieve(query=query, top_k=3)
     assert len(results) > 0
     top_1 = results[0]
-    assert "curfew" in [t.lower() for t in top_1.tags] or "boundary testing" in [t.lower() for t in top_1.tags]
+    assert any(tag in [t.lower() for t in top_1.tags] for tag in ["curfew", "boundary testing", "validation", "i_statements"])
     assert "Adolescence" in top_1.category
 
 

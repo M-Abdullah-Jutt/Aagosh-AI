@@ -194,7 +194,7 @@ def test_knowledge_retrieval_integration(test_child: Child, parent_auth_headers:
 # 9. LLM provider abstraction works
 def test_llm_provider_abstraction():
     provider = get_llm_provider()
-    assert provider.provider_name in ["mock", "openai", "gemini"]
+    assert provider.provider_name in ["mock", "openai", "gemini", "groq"]
 
 
 # 10. Provider failure handled
@@ -255,7 +255,7 @@ def test_programmatic_source_references():
     ]
     citations = ParentingSafetyValidator.generate_programmatic_citations(mock_retrieved)
     assert len(citations) == 1
-    assert citations[0].source == "Parentingpdf.pdf"
+    assert citations[0].source == "Parenting Knowledge Base"
     assert citations[0].page == 2
 
     # Verify fabricated reference detection

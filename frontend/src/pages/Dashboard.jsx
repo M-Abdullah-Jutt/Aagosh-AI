@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../i18n/LanguageContext';
 import childrenService from '../services/childrenService';
-import LiveParentingCard from '../components/LiveParenting/LiveParentingCard';
 import {
   LogOut,
   User,
@@ -16,7 +15,10 @@ import {
   MessageCircle,
   Plus,
   ChevronRight,
-  HeartHandshake
+  HeartHandshake,
+  Gamepad2,
+  Brain,
+  ArrowRight
 } from 'lucide-react';
 
 export const Dashboard = () => {
@@ -201,20 +203,28 @@ export const Dashboard = () => {
           </div>
         </div>
 
-        {/* Live Coaching Center */}
-        <div className="space-y-3">
-          <div className="flex items-center justify-between px-1">
-            <div className="flex items-center space-x-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-              <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500">
-                Live Coaching Center
-              </h2>
+        {/* Parent Practice Lab Featured Card */}
+        <div className="bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 rounded-3xl p-6 sm:p-7 text-white shadow-md relative overflow-hidden flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+          <div className="space-y-2 max-w-xl">
+            <div className="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-white">
+              <Gamepad2 className="w-3.5 h-3.5" />
+              <span className="uppercase tracking-wider">New • Parent Practice Lab</span>
             </div>
-            <span className="text-xs text-emerald-700 font-semibold bg-emerald-50 border border-emerald-200/60 px-2.5 py-0.5 rounded-full">
-              Real-Time Active
-            </span>
+            <h2 className="text-xl sm:text-2xl font-black tracking-tight">
+              Practice Challenging Child Moments with an Online Child
+            </h2>
+            <p className="text-orange-100 text-xs sm:text-sm leading-relaxed">
+              Step into simulated scenarios (meltdowns, bedtime resistance, sibling fights), respond naturally, and receive a complete AI Coach audit of your mistakes, tone, and golden recommendations.
+            </p>
           </div>
-          <LiveParentingCard />
+
+          <Link
+            to="/practice"
+            className="inline-flex items-center justify-center space-x-2 bg-white hover:bg-orange-50 text-orange-700 font-bold text-sm px-6 py-3.5 rounded-2xl shadow-lg transition-all transform hover:-translate-y-0.5 shrink-0"
+          >
+            <span>Enter Practice Lab</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
       </div>
     </div>

@@ -17,7 +17,7 @@ import {
   CheckCircle2,
   XCircle,
   MessageCircle,
-  Mic,
+  Gamepad2,
 } from 'lucide-react';
 
 export const ChildDetailsPage = () => {
@@ -169,15 +169,15 @@ export const ChildDetailsPage = () => {
                 <span>Ask AI Coach</span>
               </Link>
               <Link
-                to={`/live-parenting?childId=${child.id}`}
-                className="tour-live-parenting inline-flex items-center space-x-2 bg-gradient-to-r from-emerald-700 via-teal-700 to-emerald-800 hover:from-emerald-600 hover:to-teal-600 text-white px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl font-semibold text-xs shadow-sm hover:shadow-md transition"
+                to="/practice"
+                className="tour-parent-practice inline-flex items-center space-x-2 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl font-semibold text-xs shadow-sm hover:shadow-md transition"
               >
-                <Mic className="w-4 h-4 text-emerald-300 animate-pulse" />
-                <span>Live Parenting</span>
+                <Gamepad2 className="w-4 h-4 text-orange-200" />
+                <span>Parent Practice</span>
               </Link>
               <Link
                 to={`/children/${child.id}/analytics`}
-                className="tour-insights inline-flex items-center space-x-2 bg-indigo-600 hover:bg-indigo-700 text-white px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl font-semibold text-xs shadow-sm hover:shadow transition"
+                className="tour-insights inline-flex items-center space-x-2 bg-brand-600 hover:bg-brand-700 text-white px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl font-semibold text-xs shadow-sm hover:shadow transition"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />

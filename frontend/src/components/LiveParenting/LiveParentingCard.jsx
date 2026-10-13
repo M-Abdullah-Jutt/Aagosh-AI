@@ -49,7 +49,7 @@ export const LiveParentingCard = () => {
     <div className="relative bg-white border border-emerald-200/80 rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow overflow-hidden">
       {/* Decorative ambient gradient backdrop */}
       <div className="absolute right-0 top-0 w-96 h-96 bg-gradient-to-bl from-emerald-100/50 via-teal-50/40 to-transparent rounded-full blur-3xl pointer-events-none -mr-20 -mt-20" />
-      <div className="absolute left-0 bottom-0 w-64 h-64 bg-indigo-50/30 rounded-full blur-2xl pointer-events-none -ml-10 -mb-10" />
+      <div className="absolute left-0 bottom-0 w-64 h-64 bg-amber-50/30 rounded-full blur-2xl pointer-events-none -ml-10 -mb-10" />
 
       <div className="relative z-10 space-y-6">
         {/* Top Header: Badge, Title & Status */}
@@ -98,7 +98,7 @@ export const LiveParentingCard = () => {
             onClick={() => setSelectedMode('non_human')}
             className={`cursor-pointer rounded-2xl p-5 border-2 transition-all relative ${
               selectedMode === 'non_human'
-                ? 'bg-gradient-to-br from-slate-900 via-slate-850 to-indigo-950 border-emerald-500 text-white shadow-lg'
+                ? 'bg-gradient-to-br from-slate-900 via-slate-850 to-slate-900 border-emerald-500 text-white shadow-lg'
                 : 'bg-white border-slate-200 hover:border-slate-300 text-slate-700'
             }`}
           >

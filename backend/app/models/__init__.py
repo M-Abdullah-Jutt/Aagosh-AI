@@ -2,6 +2,7 @@ from app.models.user import User
 from app.models.child import Child, ChildProfile, ParentingGoal
 from app.models.check_in import DailyCheckIn, BehaviorEvent
 from app.models.coach import CoachConversation, CoachMessage
+from app.models.feedback import GuidanceFeedback
 
 __all__ = [
     "User",
@@ -12,4 +13,5 @@ __all__ = [
     "BehaviorEvent",
     "CoachConversation",
     "CoachMessage",
+    "GuidanceFeedback",
 ]

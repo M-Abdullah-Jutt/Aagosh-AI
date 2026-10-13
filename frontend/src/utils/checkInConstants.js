@@ -9,7 +9,7 @@ export const OVERALL_MOODS = [
 export const EMOTIONS = [
   { id: 'angry', labelKey: 'emotions.angry', color: 'bg-red-100 text-red-800 border-red-200' },
   { id: 'frustrated', labelKey: 'emotions.frustrated', color: 'bg-orange-100 text-orange-800 border-orange-200' },
-  { id: 'sad', labelKey: 'emotions.sad', color: 'bg-blue-100 text-blue-800 border-blue-200' },
+  { id: 'sad', labelKey: 'emotions.sad', color: 'bg-amber-100 text-amber-800 border-amber-200' },
   { id: 'anxious', labelKey: 'emotions.anxious', color: 'bg-purple-100 text-purple-800 border-purple-200' },
   { id: 'excited', labelKey: 'emotions.excited', color: 'bg-amber-100 text-amber-800 border-amber-200' },
   { id: 'calm', labelKey: 'emotions.calm', color: 'bg-emerald-100 text-emerald-800 border-emerald-200' },

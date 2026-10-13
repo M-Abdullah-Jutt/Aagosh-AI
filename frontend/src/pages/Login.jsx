@@ -48,11 +48,11 @@ export const Login = () => {
   };
 
   return (
-    <div className="min-h-[85vh] flex items-center justify-center px-4 py-12 bg-gradient-to-br from-emerald-50/50 via-teal-50/30 to-amber-50/20">
+    <div className="min-h-[85vh] flex items-center justify-center px-4 py-12 bg-gradient-to-br from-amber-50/60 via-yellow-50/40 to-emerald-50/30">
       <div className="w-full max-w-md bg-white/90 backdrop-blur-sm border border-emerald-100/80 shadow-xl rounded-2xl p-8">
         {/* Brand Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 bg-emerald-100/70 text-emerald-700 rounded-2xl mb-4 shadow-sm">
+          <div className="inline-flex items-center justify-center w-14 h-14 bg-brand-100/70 text-brand-700 rounded-2xl mb-4 shadow-sm">
             <HeartHandshake className="w-8 h-8" />
           </div>
           <h1 className="text-2xl font-bold text-slate-800">{t('auth.loginTitle')}</h1>
@@ -85,7 +85,7 @@ export const Login = () => {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder={t('auth.emailPlaceholder')}
-                className="w-full pl-11 pr-4 py-3 bg-slate-50/50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
+                className="w-full pl-11 pr-4 py-3 bg-slate-50/50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition"
               />
             </div>
           </div>
@@ -106,7 +106,7 @@ export const Login = () => {
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="••••••••"
-                className="w-full pl-11 pr-11 py-3 bg-slate-50/50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition"
+                className="w-full pl-11 pr-11 py-3 bg-slate-50/50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition"
               />
               <button
                 type="button"
@@ -121,7 +121,7 @@ export const Login = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full py-3.5 px-4 bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-300 text-white font-semibold rounded-xl shadow-md shadow-emerald-600/20 hover:shadow-lg transition flex items-center justify-center space-x-2"
+            className="w-full py-3.5 px-4 bg-brand-600 hover:bg-brand-700 disabled:bg-brand-300 text-white font-semibold rounded-xl shadow-md shadow-brand-600/20 hover:shadow-lg transition flex items-center justify-center space-x-2"
           >
             {isSubmitting ? (
               <>
@@ -137,7 +137,7 @@ export const Login = () => {
         {/* Footer */}
         <div className="mt-8 text-center text-sm text-slate-600 border-t border-slate-100 pt-6">
           {t('auth.noAccount')}{' '}
-          <Link to="/register" className="font-semibold text-emerald-700 hover:text-emerald-800 transition">
+          <Link to="/register" className="font-semibold text-brand-700 hover:text-brand-800 transition">
             {t('auth.noAccountLink')}
           </Link>
         </div>

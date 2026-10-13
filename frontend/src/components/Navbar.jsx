@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
-import { Heart, User, LogOut, LayoutDashboard, LogIn, UserPlus, BookOpen, Home, Menu, X } from 'lucide-react';
+import { Heart, User, LogOut, LayoutDashboard, LogIn, UserPlus, BookOpen, Home, Menu, X, Gamepad2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../i18n/LanguageContext';
 import LanguageSwitcher from './LanguageSwitcher';
@@ -23,8 +23,8 @@ export const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo & Branding */}
           <NavLink to="/" className="flex items-center space-x-2.5 group" onClick={() => setIsOpen(false)}>
-            <div className="w-9 h-9 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-700 group-hover:bg-emerald-200 transition-colors">
-              <Heart className="w-5 h-5 fill-emerald-500/20 text-emerald-600" />
+            <div className="w-9 h-9 rounded-xl bg-orange-100 flex items-center justify-center text-orange-700 group-hover:bg-orange-200 transition-colors">
+              <Heart className="w-5 h-5 fill-orange-500/20 text-orange-600" />
             </div>
             <div>
               <span className="font-semibold text-lg text-slate-900 tracking-tight block leading-none">
@@ -50,6 +50,10 @@ export const Navbar = () => {
                 <NavLink to="/dashboard" className={navLinkClass('tour-dashboard')}>
                   <LayoutDashboard className="w-4 h-4 text-emerald-600" />
                   <span className="hidden md:inline">{t('nav.dashboard')}</span>
+                </NavLink>
+                <NavLink to="/practice" className={navLinkClass('tour-practice')}>
+                  <Gamepad2 className="w-4 h-4 text-orange-500" />
+                  <span className="hidden md:inline">{t('nav.parentPractice')}</span>
                 </NavLink>
                 <NavLink to="/children" className={navLinkClass('tour-children')}>
                   <User className="w-4 h-4 text-emerald-600" />
@@ -96,7 +100,7 @@ export const Navbar = () => {
                 </Link>
                 <Link
                   to="/register"
-                  className="px-3.5 py-1.5 text-sm font-medium bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg shadow-sm hover:shadow transition flex items-center space-x-1.5"
+                  className="px-3.5 py-1.5 text-sm font-medium bg-brand-600 hover:bg-brand-700 text-white rounded-lg shadow-sm hover:shadow transition flex items-center space-x-1.5"
                 >
                   <UserPlus className="w-4 h-4" />
                   <span className="hidden md:inline">{t('nav.register')}</span>
@@ -142,6 +146,14 @@ export const Navbar = () => {
               >
                 <LayoutDashboard className="w-4 h-4 text-emerald-600" />
                 <span>{t('nav.dashboard')}</span>
+              </NavLink>
+              <NavLink
+                to="/practice"
+                onClick={() => setIsOpen(false)}
+                className={navLinkClass('tour-practice')}
+              >
+                <Gamepad2 className="w-4 h-4 text-orange-500" />
+                <span>{t('nav.parentPractice')}</span>
               </NavLink>
               <NavLink
                 to="/children"
@@ -195,7 +207,7 @@ export const Navbar = () => {
                 <Link
                   to="/register"
                   onClick={() => setIsOpen(false)}
-                  className="px-3.5 py-2 text-sm font-medium bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg shadow-sm hover:shadow transition flex items-center justify-center space-x-2"
+                  className="px-3.5 py-2 text-sm font-medium bg-brand-600 hover:bg-brand-700 text-white rounded-lg shadow-sm hover:shadow transition flex items-center justify-center space-x-2"
                 >
                   <UserPlus className="w-4 h-4" />
                   <span>{t('nav.register')}</span>

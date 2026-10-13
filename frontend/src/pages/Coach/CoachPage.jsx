@@ -2,10 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import childrenService from '../../services/childrenService';
 import coachService from '../../services/coachService';
+import feedbackService from '../../services/feedbackService';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { localizeOptions } from '../../utils/i18nOptions';
 import { ANALYSIS_PERIODS } from '../../utils/checkInConstants';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, ThumbsUp, ThumbsDown, Check } from 'lucide-react';
 
 /** Renders **bold** markdown and \n as <br/> */
 function RichText({ text }) {
@@ -67,6 +68,20 @@ function MessageBubble({ msg }) {
     : (msg.metadata?.suggested_steps?.length ? msg.metadata.suggested_steps : []);
   const sources = Array.isArray(msg.source_references) ? msg.source_references : [];
   const isWelcome = msg.metadata?.model === 'welcome-init';
+  const [feedbackGiven, setFeedbackGiven] = useState(null);
+
+  const handleFeedback = async (helpful) => {
+    setFeedbackGiven(helpful);
+    try {
+      await feedbackService.submitFeedback({
+        module: 'ai_chat_coach',
+        isHelpful: helpful,
+        targetId: msg.id,
+      });
+    } catch (err) {
+      console.warn('Could not submit coach feedback:', err);
+    }
+  };
 
   if (isUser) {
     return (
@@ -112,12 +127,12 @@ function MessageBubble({ msg }) {
           )}
 
           {steps.length > 0 && (
-            <div className="mx-4 mb-3.5 bg-indigo-50 border border-indigo-100 rounded-xl p-3">
-              <p className="text-[10px] font-bold text-indigo-700 uppercase tracking-widest mb-2">{t('coach.actionSteps')}</p>
+            <div className="mx-4 mb-3.5 bg-amber-50 border border-amber-100 rounded-xl p-3">
+              <p className="text-[10px] font-bold text-brand-700 uppercase tracking-widest mb-2">{t('coach.actionSteps')}</p>
               <ol className="space-y-2">
                 {steps.map((st, i) => (
                   <li key={i} className="flex items-start gap-2.5 text-xs text-slate-700">
-                    <span className="w-5 h-5 rounded-full bg-indigo-600 text-white text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+                    <span className="w-5 h-5 rounded-full bg-brand-600 text-white text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">
                       {i + 1}
                     </span>
                     {st}
@@ -152,9 +167,39 @@ function MessageBubble({ msg }) {
             </div>
           )}
 
-          <div className="px-4 py-2 bg-slate-50 border-t border-slate-100 flex justify-between items-center">
+          <div className="px-4 py-2 bg-slate-50 border-t border-slate-100 flex flex-wrap justify-between items-center gap-2">
             {!isWelcome && (
-              <span className="text-[9px] text-slate-400 italic">{t('coach.notClinical')}</span>
+              <div className="flex items-center space-x-2">
+                <span className="text-[10px] text-slate-500 font-medium">Was this helpful?</span>
+                <button
+                  type="button"
+                  onClick={() => handleFeedback(true)}
+                  disabled={feedbackGiven !== null}
+                  title="Helpful"
+                  className={`p-1 rounded-md transition flex items-center gap-1 text-[10px] ${
+                    feedbackGiven === true
+                      ? 'bg-emerald-100 text-emerald-800 font-bold'
+                      : 'text-slate-400 hover:text-emerald-700 hover:bg-slate-200/60'
+                  }`}
+                >
+                  <ThumbsUp className="w-3 h-3" />
+                  {feedbackGiven === true && <span>Yes</span>}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleFeedback(false)}
+                  disabled={feedbackGiven !== null}
+                  title="Not Helpful"
+                  className={`p-1 rounded-md transition flex items-center gap-1 text-[10px] ${
+                    feedbackGiven === false
+                      ? 'bg-rose-100 text-rose-800 font-bold'
+                      : 'text-slate-400 hover:text-rose-700 hover:bg-slate-200/60'
+                  }`}
+                >
+                  <ThumbsDown className="w-3 h-3" />
+                  {feedbackGiven === false && <span>No</span>}
+                </button>
+              </div>
             )}
             {isWelcome && <span />}
             <span className="text-[9px] text-slate-400">{formatTime(msg.created_at)}</span>

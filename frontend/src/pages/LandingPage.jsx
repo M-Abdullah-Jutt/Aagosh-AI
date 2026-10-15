@@ -14,7 +14,9 @@ import {
   Radio,
   ShieldCheck,
   Sparkles,
-  PlayCircle
+  PlayCircle,
+  Quote,
+  Star
 } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
 
@@ -214,6 +216,81 @@ export const LandingPage = () => {
                 <p className="text-xs text-stone-600 leading-relaxed">
                   {t(`landing.principles.${stepId}.description`)}
                 </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* User Testimonials Section */}
+      <section className="space-y-8 max-w-5xl mx-auto">
+        <div className="text-center max-w-2xl mx-auto space-y-3">
+          <div className="inline-flex items-center space-x-2 bg-amber-50 border border-amber-200/80 text-amber-800 text-xs font-semibold px-4 py-1.5 rounded-full">
+            <Quote className="w-3.5 h-3.5 text-amber-600" />
+            <span className="uppercase tracking-wider text-[11px]">{t('landing.testimonials.badge')}</span>
+          </div>
+          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+            {t('landing.testimonials.title')}
+          </h2>
+          <p className="text-sm text-slate-600 leading-relaxed">
+            {t('landing.testimonials.subtitle')}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {[
+            {
+              name: 'Noor',
+              role: 'Parent',
+              feedback: 'Amazed, it used the check in information and generated an answer and that to accurate.',
+              initials: 'N',
+              avatarBg: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+            },
+            {
+              name: 'Amna Sabahat',
+              role: 'Parent & Educator',
+              feedback: "I've had such a great experience exploring this app, and I would definitely recommend it to parents and caregivers! Today’s parents really need more supportive tools like this for their children's growth and training.",
+              initials: 'AS',
+              avatarBg: 'bg-brand-100 text-brand-800 border-brand-200',
+            },
+            {
+              name: 'Shahab Mahmood',
+              role: 'Parent',
+              feedback: 'It was a good way for parents in their children parenting',
+              initials: 'SM',
+              avatarBg: 'bg-blue-100 text-blue-800 border-blue-200',
+            },
+            {
+              name: 'Aqsa Owais',
+              role: 'Caregiver',
+              feedback: 'Excellent Experience',
+              initials: 'AO',
+              avatarBg: 'bg-purple-100 text-purple-800 border-purple-200',
+            },
+          ].map((item, idx) => (
+            <div
+              key={idx}
+              className="calm-card p-6 flex flex-col justify-between space-y-4 hover:shadow-md transition-shadow relative overflow-hidden"
+            >
+              <div className="space-y-3">
+                <div className="flex items-center space-x-1 text-amber-400">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                  ))}
+                </div>
+                <p className="text-sm text-slate-700 leading-relaxed italic">
+                  "{item.feedback}"
+                </p>
+              </div>
+
+              <div className="flex items-center space-x-3 pt-3 border-t border-slate-100">
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs border ${item.avatarBg}`}>
+                  {item.initials}
+                </div>
+                <div>
+                  <h4 className="text-sm font-semibold text-slate-900">{item.name}</h4>
+                  <p className="text-xs text-slate-500">{item.role}</p>
+                </div>
               </div>
             </div>
           ))}

@@ -152,17 +152,16 @@ class ParentingSafetyValidator:
         Generates trusted source references programmatically directly from the retrieved RAG chunks,
         ensuring the LLM cannot hallucinate sources.
 
-        SearchResult is serialized as a *flat* dict — source, page, and category
-        live at the top level, NOT nested under a "metadata" key.
+        Supports both flat SearchResult dicts and nested metadata dicts.
         """
         sources = []
         seen = set()
 
         for chunk in retrieved_knowledge:
-            # Flat SearchResult dict — read fields directly from top level
-            src = chunk.get("source", "") or "Parenting Knowledge Base"
-            page = chunk.get("page")
-            category = chunk.get("category")
+            meta = chunk.get("metadata", {}) if isinstance(chunk.get("metadata"), dict) else {}
+            src = chunk.get("source") or meta.get("source") or "Parenting Knowledge Base"
+            page = chunk.get("page") if chunk.get("page") is not None else meta.get("page")
+            category = chunk.get("category") or meta.get("category")
 
             key = (src, page, category)
             if key not in seen:
@@ -184,11 +183,14 @@ class ParentingSafetyValidator:
     ) -> bool:
         """
         Verifies that all source references returned by an LLM exist within the retrieved knowledge chunks.
+        Supports both flat SearchResult dicts and nested metadata dicts.
         """
-        retrieved_sources = {
-            (chunk.get("metadata", {}).get("source"), chunk.get("metadata", {}).get("page"))
-            for chunk in retrieved_knowledge
-        }
+        retrieved_sources = set()
+        for chunk in retrieved_knowledge:
+            meta = chunk.get("metadata", {}) if isinstance(chunk.get("metadata"), dict) else {}
+            src = chunk.get("source") or meta.get("source")
+            page = chunk.get("page") if chunk.get("page") is not None else meta.get("page")
+            retrieved_sources.add((src, page))
 
         for ref in llm_references:
             # Check if source exists in retrieved set

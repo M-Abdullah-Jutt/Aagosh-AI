@@ -251,7 +251,7 @@ def test_pydantic_response_validation(test_child: Child, parent_auth_headers: di
 # 14. Source references generated from retrieved knowledge & 15. Fabricated source rejected
 def test_programmatic_source_references():
     mock_retrieved = [
-        {"content": "...", "metadata": {"source": "Parentingpdf.pdf", "page": 2, "category": "Toddlers (1–3 Years)"}}
+        {"content": "...", "metadata": {"source": "Parenting Knowledge Base", "page": 2, "category": "Toddlers (1–3 Years)"}}
     ]
     citations = ParentingSafetyValidator.generate_programmatic_citations(mock_retrieved)
     assert len(citations) == 1

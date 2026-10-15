@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Users, CheckCircle, PieChart, ShieldCheck } from 'lucide-react';
-import axios from 'axios';
+import apiClient from '../../services/api';
 
 const Overview = () => {
   const [dbStats, setDbStats] = useState({
@@ -15,7 +15,7 @@ const Overview = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await axios.get('/api/v1/admin/stats');
+        const response = await apiClient.get('/admin/stats');
         setDbStats(response.data);
       } catch (error) {
         console.error('Error fetching admin stats:', error);

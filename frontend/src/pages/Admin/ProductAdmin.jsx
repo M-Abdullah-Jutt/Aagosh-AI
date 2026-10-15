@@ -11,7 +11,7 @@ import {
   CheckCircle2,
   AlertCircle
 } from 'lucide-react';
-import axios from 'axios';
+import apiClient from '../../services/api';
 
 const ProductAdmin = () => {
   const [stats, setStats] = useState({
@@ -36,7 +36,7 @@ const ProductAdmin = () => {
     const fetchStats = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('/api/v1/admin/stats');
+        const response = await apiClient.get('/admin/stats');
         setStats(response.data);
       } catch (error) {
         console.error('Error fetching admin stats:', error);

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Server, Settings, Users } from 'lucide-react';
-import axios from 'axios';
+import apiClient from '../../services/api';
 
 const TechnicalAdmin = () => {
   const [stats, setStats] = useState({ latest_users: [] });
@@ -8,7 +8,7 @@ const TechnicalAdmin = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await axios.get('/api/v1/admin/stats');
+        const response = await apiClient.get('/admin/stats');
         setStats(response.data);
       } catch (error) {
         console.error('Error fetching admin stats:', error);

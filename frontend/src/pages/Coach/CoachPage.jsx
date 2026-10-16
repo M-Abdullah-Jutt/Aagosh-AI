@@ -149,7 +149,24 @@ function MessageBubble({ msg }) {
               </p>
               <div className="flex flex-wrap gap-1.5">
                 {sources.map((s, i) => {
-                  const label = s.display_name || s.source || 'Source';
+                  const raw = s.display_name || s.source || 'Parenting Knowledge Base';
+                  const lower = raw.toLowerCase();
+                  let label = raw;
+                  if (lower.includes('unicef')) {
+                    label = 'UNICEF Pakistan ECD';
+                  } else if (lower.includes('parvarish')) {
+                    label = 'Aaghosh Parvarish Protocols';
+                  } else if (lower.includes('aaghosh')) {
+                    label = 'Aaghosh Parenting Protocols';
+                  } else if (lower.includes('parentingpdf') || lower.includes('cdc')) {
+                    label = 'CDC Positive Parenting Tips';
+                  } else if (lower.includes('art of parenting') || lower.includes('nip.edu.pk') || lower.includes('art_of_parenting')) {
+                    label = 'Art of Parenting (NIP)';
+                  } else {
+                    const clean = raw.replace(/^.*[\\\/]/, '').replace(/\.pdf$/i, '').replace(/_/g, ' ').trim();
+                    label = clean || 'Parenting Knowledge Base';
+                  }
+
                   return (
                     <span
                       key={i}

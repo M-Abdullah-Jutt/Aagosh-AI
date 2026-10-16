@@ -101,42 +101,42 @@ export const LandingPage = () => {
 
       {/* Purpose & Mission Section */}
       <section className="max-w-4xl mx-auto">
-        <div className="relative rounded-3xl p-7 sm:p-10 bg-gradient-to-br from-emerald-900 via-slate-900 to-brand-950 text-white shadow-xl overflow-hidden border border-emerald-500/20">
-          <div className="absolute right-0 top-0 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute left-0 bottom-0 w-60 h-60 bg-amber-500/10 rounded-full blur-2xl pointer-events-none" />
+        <div className="relative rounded-3xl p-7 sm:p-10 bg-gradient-to-br from-emerald-50/90 via-white to-amber-50/70 shadow-sm hover:shadow-md transition-shadow overflow-hidden border border-emerald-200/60 text-slate-800">
+          <div className="absolute right-0 top-0 w-80 h-80 bg-emerald-100/40 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute left-0 bottom-0 w-60 h-60 bg-amber-100/40 rounded-full blur-2xl pointer-events-none" />
 
           <div className="relative z-10 space-y-5 text-center sm:text-left">
-            <div className="inline-flex items-center space-x-2 bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-semibold px-4 py-1.5 rounded-full">
-              <Target className="w-3.5 h-3.5 text-emerald-400" />
+            <div className="inline-flex items-center space-x-2 bg-emerald-100/80 border border-emerald-300/50 text-emerald-800 text-xs font-semibold px-4 py-1.5 rounded-full">
+              <Target className="w-3.5 h-3.5 text-emerald-600" />
               <span className="uppercase tracking-wider text-[11px]">{t('landing.purpose.badge')}</span>
             </div>
 
-            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
               {t('landing.purpose.title')}
             </h2>
 
-            <p className="text-base sm:text-lg text-emerald-100/90 leading-relaxed font-light">
+            <p className="text-base sm:text-lg text-slate-700 leading-relaxed font-normal">
               {t('landing.purpose.subtitle')}
             </p>
 
-            <div className="p-4 sm:p-5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm">
-              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            <div className="p-4 sm:p-5 rounded-2xl bg-white/80 border border-emerald-100/80 shadow-xs backdrop-blur-sm">
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                 {t('landing.purpose.missionText')}
               </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-xs">
-              <div className="flex items-center space-x-2 text-emerald-200 bg-white/5 px-3.5 py-2.5 rounded-xl border border-white/5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>Evidence-Based Child Psychology</span>
+              <div className="flex items-center space-x-2 text-slate-700 bg-white/90 px-3.5 py-2.5 rounded-xl border border-emerald-100 shadow-2xs">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                <span className="font-medium">Evidence-Based Child Psychology</span>
               </div>
-              <div className="flex items-center space-x-2 text-emerald-200 bg-white/5 px-3.5 py-2.5 rounded-xl border border-white/5">
-                <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>Zero Judgment Practice Environment</span>
+              <div className="flex items-center space-x-2 text-slate-700 bg-white/90 px-3.5 py-2.5 rounded-xl border border-amber-100 shadow-2xs">
+                <CheckCircle2 className="w-4 h-4 text-brand-500 shrink-0" />
+                <span className="font-medium">Zero Judgment Practice Environment</span>
               </div>
-              <div className="flex items-center space-x-2 text-emerald-200 bg-white/5 px-3.5 py-2.5 rounded-xl border border-white/5">
-                <CheckCircle2 className="w-4 h-4 text-brand-300 shrink-0" />
-                <span>Tailored for Every Child's Milestones</span>
+              <div className="flex items-center space-x-2 text-slate-700 bg-white/90 px-3.5 py-2.5 rounded-xl border border-emerald-100 shadow-2xs">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                <span className="font-medium">Tailored for Every Child's Milestones</span>
               </div>
             </div>
           </div>

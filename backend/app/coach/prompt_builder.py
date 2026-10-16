@@ -6,6 +6,7 @@ from app.coach.languages import (
     get_language_directive,
     normalize_language,
 )
+from app.coach.safety import ParentingSafetyValidator
 
 SYSTEM_PROMPT = """You are Aaghosh AI, a compassionate, friendly, and source-grounded parenting-support assistant.
 
@@ -113,8 +114,9 @@ class ParentingPromptBuilder:
                 cat = chunk.get("category")
                 tags = ", ".join(chunk.get("tags", []))
                 content = chunk.get("content")
+                display_src = ParentingSafetyValidator._resolve_display_name(src) if src else "Parenting Knowledge Base"
                 context_lines.append(f"\n--- {cid} ---")
-                context_lines.append(f"Source: {src} (Page {pg})")
+                context_lines.append(f"Source: {display_src} (File: {src}, Page {pg})")
                 context_lines.append(f"Category: {cat} | Tags: {tags}")
                 context_lines.append(f"Content: {content}")
 

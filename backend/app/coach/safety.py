@@ -129,22 +129,35 @@ class ParentingSafetyValidator:
     # Maps substrings (lowercased) found in raw source_name values to the
     # human-friendly label shown in the UI "Cited Sources" section.
     _SOURCE_DISPLAY_NAMES = [
-        ("art of parenting",  "Art of Parenting"),
-        ("nip.edu.pk",        "Art of Parenting"),
-        ("art_of_parenting",  "Art of Parenting"),
-        ("unicef",            "UNICEF"),
-        ("cdc",               "CDC"),
+        ("unicef_pakistan",             "UNICEF Pakistan ECD"),
+        ("unicef",                      "UNICEF Pakistan ECD"),
+        ("parvarish",                   "Aaghosh Parvarish Protocols"),
+        ("aaghosh_rag_action",          "Aaghosh Parenting Protocols"),
+        ("aaghosh",                     "Aaghosh Parenting Protocols"),
+        ("parentingpdf",                "CDC Positive Parenting Tips"),
+        ("art of parenting",            "Art of Parenting (NIP)"),
+        ("nip.edu.pk",                  "Art of Parenting (NIP)"),
+        ("art_of_parenting",            "Art of Parenting (NIP)"),
+        ("cdc",                         "CDC Positive Parenting Tips"),
     ]
 
     @classmethod
     def _resolve_display_name(cls, raw_source: str) -> str:
         """Return a human-readable display name for a raw source string."""
-        lower = raw_source.lower()
+        if not raw_source:
+            return "Parenting Knowledge Base"
+
+        lower = raw_source.lower().strip()
         for keyword, label in cls._SOURCE_DISPLAY_NAMES:
             if keyword in lower:
                 return label
-        # Fall back to the raw string (capitalised) if nothing matches
-        return raw_source.strip() or "Parenting Knowledge Base"
+
+        # Clean fallback: strip path and .pdf extension, format underscores
+        clean_name = raw_source.replace("\\", "/").split("/")[-1]
+        if clean_name.lower().endswith(".pdf"):
+            clean_name = clean_name[:-4]
+        clean_name = clean_name.replace("_", " ").strip()
+        return clean_name.title() if clean_name else "Parenting Knowledge Base"
 
     @staticmethod
     def generate_programmatic_citations(retrieved_knowledge: List[Dict[str, Any]]) -> List[SourceReference]:
